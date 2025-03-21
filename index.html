@@ -17,15 +17,6 @@
             </ul>
         </nav>
     </header>
-    <div id="news-container"></div>
-
-<script>
-    fetch('news.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('news-container').innerHTML = data;
-        });
-</script>
     <main>
         <h2>Chào mừng đến với trang tin tuyên truyền của Thị trấn Hóc Môn</h2>
         <p>Trang web này dùng để đăng tin tuyên truyền.</p>
@@ -33,5 +24,23 @@
     <footer>
         <p>&copy; 2025 Ủy ban Thị trấn Hóc Môn</p>
     </footer>
+    <div id="news-container"></div>
+
+<script>
+    fetch('news.json')
+        .then(response => response.json())
+        .then(data => {
+            let newsHTML = "<h2>Bảng tin tuyên truyền</h2>";
+            data.forEach(item => {
+                newsHTML += `<div class="news-item">
+                                <h3>${item.title}</h3>
+                                <p><strong>🗓 Ngày: ${item.date}</strong></p>
+                                <p>${item.content}</p>
+                                <hr>
+                             </div>`;
+            });
+            document.getElementById('news-container').innerHTML = newsHTML;
+        });
+</script>
 </body>
 </html>

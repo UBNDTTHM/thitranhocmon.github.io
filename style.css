@@ -8,26 +8,27 @@ body {
 .header {
     background-color: #0044cc;
     color: white;
-    text-align: center;
-    padding: 20px;
+    padding: 20px 0;
     font-size: 24px;
-    white-space: nowrap;
     overflow: hidden;
     position: relative;
     width: 100%;
+    white-space: nowrap;
 }
 .header span {
     display: inline-block;
     white-space: nowrap;
     animation: marquee 10s linear infinite;
-    padding-left: 100%;
+    position: absolute;
+    will-change: transform;
+    left: 100%;
 }
 @keyframes marquee {
     from {
         transform: translateX(0);
     }
     to {
-        transform: translateX(-100%);
+        transform: translateX(-100vw);
     }
 }
 .navbar {
@@ -61,4 +62,3 @@ body {
     margin: 0;
     color: #003399;
 }
-

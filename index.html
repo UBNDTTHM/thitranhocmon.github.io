@@ -159,5 +159,26 @@
             showAdminPanel();
         });
     </script>
+    <script>
+    function startMarquee() {
+        let marquee = document.getElementById("marquee-text");
+        let containerWidth = document.querySelector(".marquee-container").offsetWidth;
+        let textWidth = marquee.offsetWidth;
+        let position = containerWidth;
+        
+        function move() {
+            position -= 2; 
+            if (position < -textWidth) {
+                position = containerWidth;
+            }
+            marquee.style.transform = `translateX(${position}px)`;
+            requestAnimationFrame(move);
+        }
+        
+        move();
+    }
+
+    document.addEventListener("DOMContentLoaded", startMarquee);
+</script>
 </body>
 </html>

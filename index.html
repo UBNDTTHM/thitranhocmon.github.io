@@ -28,10 +28,6 @@
             padding: 10px 20px;
             text-decoration: none;
         }
-        .navbar input {
-            padding: 5px;
-            margin-left: 10px;
-        }
         .content {
             padding: 20px;
         }
@@ -42,200 +38,95 @@
             border-left: 5px solid #cc0000;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .announcement:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-        }
-        .announcement h3 {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .announcement p {
-            font-size: 16px;
-            color: #333;
-        }
-    .marquee-container {    
-    overflow: hidden;
-    background: #003399;
-    color: white;
-    padding: 15px 0; /* Tăng padding để đảm bảo chữ không bị cắt */
-    position: relative;
-    white-space: nowrap;
-    display: flex;
-    align-items: center; /* Căn giữa theo chiều dọc */
-    height: 50px; /* Tăng chiều cao nếu cần */
-}
-
-.marquee-content {
-    font-size: 36px; /* Tăng kích thước chữ */
-    font-weight: bold;
-}
     </style>
 </head>
 <body>
     <div id="login-section">
-    <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
-    <button onclick="checkLogin()">Đăng nhập</button>
-</div>
-
-<div id="news-form" style="display: none;">
-    <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
-    <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
-    <button onclick="addNews()">Đăng Tin</button>
-</div>
-    <div class="marquee-container">
-        <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
+        <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
+        <button onclick="checkLogin()">Đăng nhập</button>
     </div>
+
+    <div id="news-form" style="display: none;">
+        <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
+        <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
+        <button onclick="addNews()">Đăng Tin</button>
+    </div>
+
     <div class="navbar">
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>
         <a href="#">Thông Báo</a>
         <a href="#">Liên Hệ</a>
-    <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
-    <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
-    <button onclick="addNews()">Đăng Tin</button>
-    <input type="text" id="search" placeholder="Tìm kiếm tin tức..." onkeyup="searchNews()">
     </div>
+
     <div class="content">
         <h2>Danh Sách Tin Tức</h2>
-        <div id="news-container">
-            <div class="announcement" data-title="Thông Báo Quan Trọng">
-                <h3>Thông Báo Quan Trọng</h3>
-                <p>Cập nhật mới nhất về các chính sách địa phương.</p>
-            </div>
-            <div class="announcement" data-title="Bản Tin Tuần">
-                <h3>Bản Tin Tuần</h3>
-                <p>Các sự kiện và hoạt động đáng chú ý trong tuần.</p>
-            </div>
-        </div>
+        <div id="news-container"></div>
     </div>
- <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let marqueeText = document.getElementById("marquee-text");
-        let containerWidth = document.querySelector(".marquee-container").offsetWidth;
-        let textWidth = marqueeText.offsetWidth;
-        let startPosition = containerWidth;
-        let endPosition = -textWidth;
 
-        function animateMarquee() {
-            let currentPosition = startPosition;
-            function step() {
-                currentPosition -= 2; // Điều chỉnh tốc độ chạy
-                if (currentPosition <= endPosition) {
-                    currentPosition = startPosition;
-                }
-                marqueeText.style.transform = `translateX(${currentPosition}px)`;
-                requestAnimationFrame(step);
+    <script>
+        const ADMIN_PASSWORD = "Hieu@1990"; 
+        
+        function checkLogin() {
+            let password = document.getElementById("admin-password").value;
+            if (password === ADMIN_PASSWORD) {
+                localStorage.setItem("isAdmin", "true");
+                showAdminPanel();
+            } else {
+                alert("Sai mật khẩu!");
             }
-            step();
         }
 
-        animateMarquee();
-    });
-</script>
-    <script>
-    function loadNews() {
-        let newsContainer = document.getElementById("news-container");
-        let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-
-        newsContainer.innerHTML = ""; // Xóa nội dung cũ để cập nhật lại từ LocalStorage
-
-        newsList.forEach(news => {
-            let newAnnouncement = document.createElement("div");
-            newAnnouncement.classList.add("announcement");
-            newAnnouncement.setAttribute("data-title", news.title);
-            newAnnouncement.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
-            newsContainer.prepend(newAnnouncement);
-        });
-    }
-
-    function addNews() {
-        let title = document.getElementById("news-title").value;
-        let content = document.getElementById("news-content").value;
-
-        if (title.trim() === "" || content.trim() === "") {
-            alert("Vui lòng nhập đầy đủ tiêu đề và nội dung!");
-            return;
+        function showAdminPanel() {
+            if (localStorage.getItem("isAdmin") === "true") {
+                document.getElementById("login-section").style.display = "none";
+                document.getElementById("news-form").style.display = "block";
+            } else {
+                document.getElementById("news-form").style.display = "none";
+            }
         }
 
-        let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-        newsList.push({ title, content });
+        function loadNews() {
+            let newsContainer = document.getElementById("news-container");
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
 
-        localStorage.setItem("newsData", JSON.stringify(newsList));
-        loadNews(); // Hiển thị lại danh sách tin tức
+            newsContainer.innerHTML = "";
+            newsList.forEach(news => {
+                let newAnnouncement = document.createElement("div");
+                newAnnouncement.classList.add("announcement");
+                newAnnouncement.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
+                newsContainer.prepend(newAnnouncement);
+            });
+        }
 
-        // Xóa nội dung nhập sau khi đăng tin
-        document.getElementById("news-title").value = "";
-        document.getElementById("news-content").value = "";
-    }
+        function addNews() {
+            if (localStorage.getItem("isAdmin") !== "true") {
+                alert("Bạn không có quyền đăng tin!");
+                return;
+            }
 
-    document.addEventListener("DOMContentLoaded", loadNews);
-</script>
-    <script>
-    const ADMIN_PASSWORD = "Hieu@1990"; // Đổi mật khẩu này để bảo mật
+            let title = document.getElementById("news-title").value;
+            let content = document.getElementById("news-content").value;
 
-    function checkLogin() {
-        let password = document.getElementById("admin-password").value;
-        if (password === ADMIN_PASSWORD) {
-            localStorage.setItem("isAdmin", "true");
+            if (title.trim() === "" || content.trim() === "") {
+                alert("Vui lòng nhập đầy đủ tiêu đề và nội dung!");
+                return;
+            }
+
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+            newsList.push({ title, content });
+            localStorage.setItem("newsData", JSON.stringify(newsList));
+            loadNews();
+
+            document.getElementById("news-title").value = "";
+            document.getElementById("news-content").value = "";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadNews();
             showAdminPanel();
-        } else {
-            alert("Sai mật khẩu!");
-        }
-    }
-
-    function showAdminPanel() {
-        if (localStorage.getItem("isAdmin") === "true") {
-            document.getElementById("login-section").style.display = "none";
-            document.getElementById("news-form").style.display = "block";
-        }
-    }
-
-    function loadNews() {
-        let newsContainer = document.getElementById("news-container");
-        let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-
-        newsContainer.innerHTML = ""; // Xóa nội dung cũ để cập nhật lại từ LocalStorage
-
-        newsList.forEach(news => {
-            let newAnnouncement = document.createElement("div");
-            newAnnouncement.classList.add("announcement");
-            newAnnouncement.setAttribute("data-title", news.title);
-            newAnnouncement.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
-            newsContainer.prepend(newAnnouncement);
         });
-    }
-
-    function addNews() {
-        if (localStorage.getItem("isAdmin") !== "true") {
-            alert("Bạn không có quyền đăng tin!");
-            return;
-        }
-
-        let title = document.getElementById("news-title").value;
-        let content = document.getElementById("news-content").value;
-
-        if (title.trim() === "" || content.trim() === "") {
-            alert("Vui lòng nhập đầy đủ tiêu đề và nội dung!");
-            return;
-        }
-
-        let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-        newsList.push({ title, content });
-
-        localStorage.setItem("newsData", JSON.stringify(newsList));
-        loadNews(); // Hiển thị lại danh sách tin tức
-
-        document.getElementById("news-title").value = "";
-        document.getElementById("news-content").value = "";
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-        loadNews();
-        showAdminPanel();
-    });
-</script>
+    </script>
 </body>
 </html>

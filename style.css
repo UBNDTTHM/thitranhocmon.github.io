@@ -17,7 +17,7 @@ body {
 }
 
 .marquee-content {
-    font-size: 28px; /* Điều chỉnh kích thước chữ phù hợp */
+    font-size: 32px; /* Điều chỉnh kích thước chữ phù hợp */
     font-weight: bold;
     color: white;
     text-transform: uppercase;

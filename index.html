@@ -108,36 +108,42 @@
             loadNews();
         }
 
-        function loadNews() {
-            let newsContainer = document.getElementById("news-container");
+        function deleteNews(index) {
             let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-            newsContainer.innerHTML = "";
-            newsList.forEach((news, index) => {
-                let newsItem = document.createElement("div");
-                newsItem.classList.add("announcement");
-                newsItem.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
-                
-                let deleteButton = document.createElement("button");
-                deleteButton.textContent = "Xóa";
-                deleteButton.classList.add("delete-button");
-                deleteButton.style.display = "inline-block";
-                deleteButton.onclick = function() { deleteNews(index); };
-                newsItem.appendChild(deleteButton);
-                
-                let editButton = document.createElement("button");
-                editButton.textContent = "Chỉnh sửa";
-                editButton.classList.add("edit-button");
-                editButton.style.display = "inline-block";
-                editButton.onclick = function() { editNews(index); };
-                newsItem.appendChild(editButton);
-                
-                newsContainer.prepend(newsItem);
-            });
+            newsList.splice(index, 1);
+            localStorage.setItem("newsData", JSON.stringify(newsList));
+            loadNews();
+        }
+
+        function editNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+            let newTitle = prompt("Nhập tiêu đề mới:", newsList[index].title);
+            let newContent = prompt("Nhập nội dung mới:", newsList[index].content);
+            if (newTitle !== null && newContent !== null) {
+                newsList[index] = { title: newTitle, content: newContent };
+                localStorage.setItem("newsData", JSON.stringify(newsList));
+                loadNews();
+            }
+        }
+
+        function startMarquee() {
+            let marquee = document.getElementById("marquee-text");
+            let position = window.innerWidth;
+            function move() {
+                position--;
+                if (position < -marquee.offsetWidth) {
+                    position = window.innerWidth;
+                }
+                marquee.style.transform = `translateX(${position}px)`;
+                requestAnimationFrame(move);
+            }
+            move();
         }
 
         document.addEventListener("DOMContentLoaded", () => {
             showAdminPanel();
             loadNews();
+            startMarquee();
         });
     </script>
 </body>

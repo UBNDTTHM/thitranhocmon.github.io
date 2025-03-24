@@ -52,15 +52,33 @@
         height: 150px; /* Định chiều cao cố định cho ô nhập nội dung */
         resize: vertical; /* Cho phép kéo giãn theo chiều dọc */
 }
-    @media (max-width: 768px) {
-    .content {
-        padding: 10px;
+   @media (max-width: 768px) {
+        .content {
+            padding: 10px;
+            font-size: 16px;
+        }
+        .announcement {
+            font-size: 16px;
+            padding: 15px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .marquee-container {
+            white-space: normal;
+            text-align: center;
+            font-size: 18px;
+        }
+        .navbar {
+            flex-direction: column;
+            gap: 5px;
+        }
+        .navbar a {
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+        }
     }
-    .announcement {
-        font-size: 14px;
-        padding: 15px;
-    }
-}
     </style>
 </head>
 <body>

@@ -18,12 +18,6 @@
         #news-form, #login-section { text-align: center; margin: 20px; }
         #news-form input, #news-form textarea, #admin-password { width: 90%; max-width: 500px; padding: 10px; margin: 5px 0; display: block; }
         #news-form button, #logout-button, #login-section button { padding: 10px 15px; background-color: #0044cc; color: white; border: none; cursor: pointer; margin: 10px; }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar { flex-direction: column; align-items: center; }
-            .marquee-content { font-size: 18px; }
-        }
     </style>
 </head>
 <body>
@@ -56,24 +50,8 @@
     </div>
 
     <script>
-        function startMarquee() {
-            let marquee = document.getElementById("marquee-text");
-            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
-            let textWidth = marquee.offsetWidth;
-            let position = containerWidth;
-            function move() {
-                position -= 2; 
-                if (position < -textWidth) {
-                    position = containerWidth;
-                }
-                marquee.style.transform = `translateX(${position}px)`;
-                requestAnimationFrame(move);
-            }
-            move();
-        }
-        document.addEventListener("DOMContentLoaded", startMarquee);
+        const ADMIN_PASSWORD = "Hieu@1990";
 
-        const ADMIN_PASSWORD = "Hieu@1990"; 
         function checkLogin() {
             let password = document.getElementById("admin-password").value;
             if (password === ADMIN_PASSWORD) {
@@ -83,10 +61,12 @@
                 alert("Sai mật khẩu!");
             }
         }
+
         function logout() {
             localStorage.removeItem("isAdmin");
             location.reload();
         }
+
         function showAdminPanel() {
             let isAdmin = localStorage.getItem("isAdmin") === "true";
             document.getElementById("login-section").style.display = isAdmin ? "none" : "block";
@@ -96,7 +76,54 @@
                 button.style.display = isAdmin ? "block" : "none";
             });
         }
-        document.addEventListener("DOMContentLoaded", showAdminPanel);
+
+        function addNews() {
+            let title = document.getElementById("news-title").value;
+            let content = document.getElementById("news-content").value;
+            if (!title || !content) return alert("Vui lòng nhập đầy đủ thông tin!");
+
+            let newsList = JSON.parse(localStorage.getItem("news")) || [];
+            newsList.push({ title, content });
+            localStorage.setItem("news", JSON.stringify(newsList));
+            displayNews();
+        }
+
+        function displayNews() {
+            let newsContainer = document.getElementById("news-container");
+            let newsList = JSON.parse(localStorage.getItem("news")) || [];
+            newsContainer.innerHTML = newsList.map((news, index) => `
+                <div class='announcement'>
+                    <h3>${news.title}</h3>
+                    <p>${news.content}</p>
+                    <button class='edit-button' onclick='editNews(${index})'>Sửa</button>
+                    <button class='delete-button' onclick='deleteNews(${index})'>Xóa</button>
+                </div>
+            `).join('');
+            showAdminPanel();
+        }
+
+        function editNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("news"));
+            let newTitle = prompt("Sửa tiêu đề:", newsList[index].title);
+            let newContent = prompt("Sửa nội dung:", newsList[index].content);
+            if (newTitle && newContent) {
+                newsList[index] = { title: newTitle, content: newContent };
+                localStorage.setItem("news", JSON.stringify(newsList));
+                displayNews();
+            }
+        }
+
+        function deleteNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("news"));
+            newsList.splice(index, 1);
+            localStorage.setItem("news", JSON.stringify(newsList));
+            displayNews();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            displayNews();
+            showAdminPanel();
+        });
     </script>
 </body>
 </html>

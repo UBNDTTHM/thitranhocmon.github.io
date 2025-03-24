@@ -56,19 +56,22 @@
             font-size: 16px;
             color: #333;
         }
-        .marquee-container {    
-            overflow: hidden;
-            background: #003399;
-            color: white;
-            padding: 20px 0;
-            position: relative;
-            white-space: nowrap;
-            text-align: center;
-        }
-        .marquee-content {
-            font-size: 32px;
-            font-weight: bold;
-        }
+    .marquee-container {    
+    overflow: hidden;
+    background: #003399;
+    color: white;
+    padding: 15px 0; /* Tăng padding để đảm bảo chữ không bị cắt */
+    position: relative;
+    white-space: nowrap;
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    height: 50px; /* Tăng chiều cao nếu cần */
+}
+
+.marquee-content {
+    font-size: 22px; /* Tăng kích thước chữ */
+    font-weight: bold;
+}
     </style>
 </head>
 <body>

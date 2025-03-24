@@ -5,23 +5,20 @@ body {
     background-color: #f4f4f4;
     overflow-x: hidden;
 }
-.marquee-container {
-    width: 100%;
-    height: 60px; /* Tăng chiều cao để tránh bị cắt */
-    overflow: hidden;
-    background-color: #0033cc;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Đảm bảo chữ nằm giữa */
-}
-
-.marquee-content {
-    font-size: 32px; /* Điều chỉnh kích thước chữ phù hợp */
-    font-weight: bold;
-    color: white;
-    text-transform: uppercase;
-    white-space: nowrap;
-    position: absolute;
-    will-change: transform;
-}
+        }
+        .marquee-container {
+        overflow: hidden;
+        background: #003399;
+        color: white;
+        padding: 20px 0;
+        position: relative;
+        white-space: nowrap;
+        display: flex;
+    }
+    .marquee-content {
+        font-size: 32px;
+        font-weight: bold;
+        white-space: nowrap;
+        display: inline-block;
+        min-width: 100%;
+    }

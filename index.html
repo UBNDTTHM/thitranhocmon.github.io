@@ -99,29 +99,25 @@
         </div>
     </div>
    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let marquee = document.getElementById("marquee-text");
-        let container = document.querySelector(".marquee-container");
+        document.addEventListener("DOMContentLoaded", function () {
+            let marquee = document.getElementById("marquee");
+            let speed = 2; // Tốc độ chạy chữ
+            let marqueeWidth = marquee.scrollWidth / 2; // Độ dài thực tế của một chuỗi chữ
 
-        // Tạo bản sao nội dung để tạo hiệu ứng liên tục
-        let clone = marquee.cloneNode(true);
-        container.appendChild(clone);
+            function animateMarquee() {
+                let currentPosition = parseFloat(getComputedStyle(marquee).transform.split(',')[4]) || 0;
+                currentPosition -= speed;
+                
+                if (currentPosition <= -marqueeWidth) {
+                    currentPosition = 0; // Khi chạy hết một đoạn, đặt lại vị trí
+                }
 
-        let position = 0;
-        let speed = 2;
-
-        function animateMarquee() {
-            position -= speed;
-            if (position <= -marquee.offsetWidth) {
-                position = 0; // Khi văn bản đầu tiên đi hết, lập tức reset vị trí
+                marquee.style.transform = `translateX(${currentPosition}px)`;
+                requestAnimationFrame(animateMarquee);
             }
-            marquee.style.transform = `translateX(${position}px)`;
-            clone.style.transform = `translateX(${position + marquee.offsetWidth}px)`;
 
-            requestAnimationFrame(animateMarquee);
-        }
-        animateMarquee();
-    });
-</script>
+            animateMarquee();
+        });
+    </script>
 </body>
 </html>

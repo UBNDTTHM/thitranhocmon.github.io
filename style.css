@@ -34,29 +34,3 @@ body {
         transform: translateX(-100%);
     }
 }
-.navbar a {
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    display: inline-block;
-}
-.navbar input {
-    padding: 5px;
-    margin-left: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-.content {
-    padding: 20px;
-}
-.announcement {
-    background-color: white;
-    padding: 15px;
-    margin: 10px 0;
-    border-left: 5px solid #cc0000;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-}
-.announcement h3 {
-    margin: 0;
-    color: #003399;
-}

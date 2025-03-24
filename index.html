@@ -21,7 +21,7 @@
         
         .marquee-container { overflow: hidden; background: #003399; color: white; padding: 15px 0; position: relative; white-space: nowrap; display: flex; align-items: center; height: 50px; }
         .marquee-content { font-size: 24px; font-weight: bold; position: absolute; white-space: nowrap; will-change: transform; }
-
+        
         @media (max-width: 768px) {
             .navbar-links { display: none; flex-direction: column; }
             .menu-icon { display: block; }
@@ -133,10 +133,25 @@
             });
             showAdminButtons();
         }
-        
+
+        function startMarquee() {
+            let marquee = document.getElementById("marquee-text");
+            let position = window.innerWidth;
+            function move() {
+                position--;
+                if (position < -marquee.offsetWidth) {
+                    position = window.innerWidth;
+                }
+                marquee.style.transform = `translateX(${position}px)`;
+                requestAnimationFrame(move);
+            }
+            move();
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             showAdminPanel();
             loadNews();
+            startMarquee();
         });
     </script>
 </body>

@@ -63,52 +63,11 @@
     </div>
 
     <script>
-        function toggleMenu() {
-            let menu = document.getElementById("navbar-links");
-            menu.style.display = (menu.style.display === "flex" ? "none" : "flex");
-        }
-        
-        function startMarquee() {
-            let marquee = document.getElementById("marquee-text");
-            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
-            let textWidth = marquee.offsetWidth;
-            let position = containerWidth;
-            
-            function move() {
-                position -= 2;
-                if (position < -textWidth) {
-                    position = containerWidth;
-                }
-                marquee.style.transform = `translateX(${position}px)`;
-                requestAnimationFrame(move);
-            }
-            move();
-        }
-        
-        document.addEventListener("DOMContentLoaded", startMarquee);
-
-        const ADMIN_PASSWORD = "Hieu@1990";
-        
-        function checkLogin() {
-            let password = document.getElementById("admin-password").value;
-            if (password === ADMIN_PASSWORD) {
-                localStorage.setItem("isAdmin", "true");
-                showAdminPanel();
-            } else {
-                alert("Sai mật khẩu!");
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem("isAdmin");
-            location.reload();
-        }
-
-        function showAdminPanel() {
+        function showAdminButtons() {
             let isAdmin = localStorage.getItem("isAdmin") === "true";
-            document.getElementById("login-section").style.display = isAdmin ? "none" : "block";
-            document.getElementById("news-form").style.display = isAdmin ? "block" : "none";
-            document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
+            document.querySelectorAll(".delete-button, .edit-button").forEach(button => {
+                button.style.display = isAdmin ? "block" : "none";
+            });
         }
 
         function addNews() {
@@ -147,6 +106,7 @@
                 
                 newsContainer.prepend(newsItem);
             });
+            showAdminButtons();
         }
         
         document.addEventListener("DOMContentLoaded", () => {

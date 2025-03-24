@@ -108,8 +108,34 @@
             document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
         }
 
+        function addNews() {
+            let title = document.getElementById("news-title").value;
+            let content = document.getElementById("news-content").value;
+            if (title.trim() === "" || content.trim() === "") {
+                alert("Vui lòng nhập tiêu đề và nội dung tin tức.");
+                return;
+            }
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+            newsList.push({ title, content });
+            localStorage.setItem("newsData", JSON.stringify(newsList));
+            loadNews();
+        }
+
+        function loadNews() {
+            let newsContainer = document.getElementById("news-container");
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+            newsContainer.innerHTML = "";
+            newsList.forEach((news, index) => {
+                let newsItem = document.createElement("div");
+                newsItem.classList.add("announcement");
+                newsItem.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
+                newsContainer.prepend(newsItem);
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             showAdminPanel();
+            loadNews();
         });
     </script>
 </body>

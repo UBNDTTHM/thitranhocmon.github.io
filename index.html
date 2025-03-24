@@ -43,9 +43,33 @@
         }
     </style>
 </head>
-<body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let marqueeText = document.getElementById("marquee-text");
+        let containerWidth = document.querySelector(".marquee-container").offsetWidth;
+        let textWidth = marqueeText.offsetWidth;
+        let startPosition = containerWidth;
+        let endPosition = -textWidth;
+
+        function animateMarquee() {
+            let currentPosition = startPosition;
+            function step() {
+                currentPosition -= 2; // Điều chỉnh tốc độ chạy
+                if (currentPosition <= endPosition) {
+                    currentPosition = startPosition;
+                }
+                marqueeText.style.transform = `translateX(${currentPosition}px)`;
+                requestAnimationFrame(step);
+            }
+            step();
+        }
+
+        animateMarquee();
+    });
+</script>
+    <body>
    <div class="marquee-container">
-    <div class="marquee-content">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
+    <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
 </div>
     <div class="navbar">
         <a href="#">Giới Thiệu</a>

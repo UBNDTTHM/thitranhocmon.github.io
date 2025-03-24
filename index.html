@@ -95,28 +95,27 @@
             </div>
         </div>
     </div>
-   <script>
+  <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let marquee = document.getElementById("marquee-text");
-        let container = document.querySelector(".marquee-container");
-
-        // Tạo bản sao nội dung để tạo hiệu ứng liên tục
-        let clone = marquee.cloneNode(true);
-        container.appendChild(clone);
-
-        let position = 0;
-        let speed = 2;
+        let marqueeText = document.getElementById("marquee-text");
+        let containerWidth = document.querySelector(".marquee-container").offsetWidth;
+        let textWidth = marqueeText.offsetWidth;
+        let startPosition = containerWidth;
+        let endPosition = -textWidth;
 
         function animateMarquee() {
-            position -= speed;
-            if (position <= -marquee.offsetWidth) {
-                position = 0; // Khi văn bản đầu tiên đi hết, lập tức reset vị trí
+            let currentPosition = startPosition;
+            function step() {
+                currentPosition -= 2; // Điều chỉnh tốc độ chạy
+                if (currentPosition <= endPosition) {
+                    currentPosition = startPosition;
+                }
+                marqueeText.style.transform = `translateX(${currentPosition}px)`;
+                requestAnimationFrame(step);
             }
-            marquee.style.transform = `translateX(${position}px)`;
-            clone.style.transform = `translateX(${position + marquee.offsetWidth}px)`;
-
-            requestAnimationFrame(animateMarquee);
+            step();
         }
+
         animateMarquee();
     });
 </script>

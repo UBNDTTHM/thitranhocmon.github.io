@@ -61,3 +61,27 @@ body {
     margin: 0;
     color: #003399;
 }
+.marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+}
+
+.marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    font-size: 24px; /* Điều chỉnh kích thước chữ */
+    font-weight: bold;
+    color: white; /* Chỉnh màu chữ nếu cần */
+    animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}

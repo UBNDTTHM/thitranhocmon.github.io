@@ -5,23 +5,27 @@ body {
     background-color: #f4f4f4;
     overflow-x: hidden;
 }
-.header {
-    background-color: #0044cc;
-    color: white;
-    padding: 20px 0;
-    font-size: 24px;
-    overflow: hidden;
-    position: relative;
+.marquee-container {
     width: 100%;
+    overflow: hidden;
+    background-color: #0033cc; /* Nền xanh */
     white-space: nowrap;
+    padding: 15px 0; /* Tăng khoảng cách trên dưới */
+    position: relative;
 }
-.header span {
+
+.marquee-content {
     display: inline-block;
+    font-size: 32px; /* Kích thước chữ lớn hơn */
+    font-weight: bold;
+    color: white; /* Màu chữ */
+    text-transform: uppercase;
+    position: absolute;
     white-space: nowrap;
-    min-width: 100%;
+    will-change: transform;
     animation: marquee 10s linear infinite;
-    transform: translateX(100%);
 }
+
 @keyframes marquee {
     from {
         transform: translateX(100%);
@@ -29,11 +33,6 @@ body {
     to {
         transform: translateX(-100%);
     }
-}
-.navbar {
-    background-color: #003399;
-    padding: 10px;
-    text-align: center;
 }
 .navbar a {
     color: white;
@@ -60,31 +59,4 @@ body {
 .announcement h3 {
     margin: 0;
     color: #003399;
-}
-.marquee-container {
-    width: 100%;
-    overflow: hidden;
-    background-color: #0033cc; /* Màu nền xanh dương */
-    padding: 10px 0; /* Tăng khoảng cách trên dưới */
-    white-space: nowrap;
-    position: relative;
-}
-
-.marquee-content {
-    display: inline-block;
-    font-size: 28px; /* Chỉnh kích thước chữ */
-    font-weight: bold;
-    color: white; /* Màu chữ trắng */
-    text-transform: uppercase; /* Viết hoa */
-    padding-left: 100%;
-    animation: marquee 10s linear infinite;
-}
-
-@keyframes marquee {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(-100%);
-    }
 }

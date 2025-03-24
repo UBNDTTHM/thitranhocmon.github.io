@@ -174,7 +174,7 @@
     document.addEventListener("DOMContentLoaded", loadNews);
 </script>
     <script>
-    const ADMIN_PASSWORD = "123456"; // Đổi mật khẩu này để bảo mật
+    const ADMIN_PASSWORD = "Hieu@1990"; // Đổi mật khẩu này để bảo mật
 
     function checkLogin() {
         let password = document.getElementById("admin-password").value;
@@ -182,7 +182,7 @@
             localStorage.setItem("isAdmin", "true");
             showAdminPanel();
         } else {
-            alert("Sai mật khẩu! Bạn không có quyền đăng tin.");
+            alert("Sai mật khẩu!");
         }
     }
 

@@ -3,44 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ủy ban Thị trấn Hóc Môn</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Trang Thông Tin - Thị Trấn Hóc Môn</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #0044cc;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+        }
+        .navbar {
+            background-color: red;
+            padding: 10px;
+            text-align: center;
+        }
+        .navbar a {
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+        .content {
+            padding: 20px;
+        }
+        .announcement {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 5px solid red;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Thị trấn Hóc Môn</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Trang chủ</a></li>
-                <li><a href="about.html">Giới thiệu</a></li>
-                <li><a href="news.html">Tin tức</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <h2>Chào mừng đến với trang tin tuyên truyền của Thị trấn Hóc Môn</h2>
-        <p>Trang web này dùng để đăng tin tuyên truyền.</p>
-    </main>
-    <footer>
-        <p>&copy; 2025 Ủy ban Thị trấn Hóc Môn</p>
-    </footer>
-    <div id="news-container"></div>
-
-<script>
-    fetch('news.json')
-        .then(response => response.json())
-        .then(data => {
-            let newsHTML = "<h2>Bảng tin tuyên truyền</h2>";
-            data.forEach(item => {
-                newsHTML += `<div class="news-item">
-                                <h3>${item.title}</h3>
-                                <p><strong>🗓 Ngày: ${item.date}</strong></p>
-                                <p>${item.content}</p>
-                                <hr>
-                             </div>`;
-            });
-            document.getElementById('news-container').innerHTML = newsHTML;
-        });
-</script>
+    <div class="header">
+        TRANG THÔNG TIN ĐIỆN TỬ THỊ TRẤN HÓC MÔN
+    </div>
+    <div class="navbar">
+        <a href="#">Giới Thiệu</a>
+        <a href="#">Tin Tức</a>
+        <a href="#">Thông Báo</a>
+        <a href="#">Liên Hệ</a>
+    </div>
+    <div class="content">
+        <div class="announcement">
+            <h3>Thông Báo</h3>
+            <p>Thông tin quan trọng từ Ủy ban Nhân dân Thị trấn Hóc Môn.</p>
+        </div>
+        <div class="announcement">
+            <h3>Bản Tin Tuần</h3>
+            <p>Cập nhật các chính sách mới nhất.</p>
+        </div>
+    </div>
 </body>
 </html>
+

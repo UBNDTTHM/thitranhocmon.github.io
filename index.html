@@ -56,22 +56,22 @@
             font-size: 16px;
             color: #333;
         }
-        .marquee-container {
+        .marquee-container {    
             overflow: hidden;
             background: #003399;
             color: white;
             padding: 20px 0;
-            white-space: nowrap;
             position: relative;
-            display: flex;
+            white-space: nowrap;
+            text-align: center;
         }
         .marquee-content {
-            display: flex;
+            display: inline-block;
+            position: absolute;
             white-space: nowrap;
+            will-change: transform;
             font-size: 32px;
             font-weight: bold;
-            position: absolute;
-            animation: marquee 10s linear infinite;
         }
     </style>
 </head>
@@ -128,8 +128,8 @@
                     position2 = position1 + textWidth;
                 }
 
-                text1.style.transform = `translateX(${position1}px)`;
-                text2.style.transform = `translateX(${position2}px)`;
+                text1.style.transform = translateX(${position1}px);
+                text2.style.transform = translateX(${position2}px);
 
                 requestAnimationFrame(step);
             }

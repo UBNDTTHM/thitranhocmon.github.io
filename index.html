@@ -1,35 +1,28 @@
-[<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Thông Tin - Thị Trấn Hóc Môn</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
         .header { background-color: #0044cc; color: white; text-align: center; padding: 20px; font-size: 24px; }
-        .navbar { background-color: #003399; padding: 10px; text-align: center; }
-        .navbar a { color: white; padding: 10px 20px; text-decoration: none; }
+        .navbar { background-color: #003399; padding: 10px; text-align: center; display: flex; justify-content: space-around; flex-wrap: wrap; }
+        .navbar a { color: white; padding: 10px 15px; text-decoration: none; display: block; }
         .content { padding: 20px; }
         .announcement { background-color: white; padding: 20px; margin: 15px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; }
         .delete-button, .edit-button { position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
         .edit-button { right: 70px; background-color: orange; }
-        .marquee-container {    
-            overflow: hidden;
-            background: #003399;
-            color: white;
-            padding: 15px 0;
-            position: relative;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            height: 50px;
-        }
-        .marquee-content {
-            font-size: 36px;
-            font-weight: bold;
-            position: absolute;
-            white-space: nowrap;
-            will-change: transform;
+        .marquee-container { overflow: hidden; background: #003399; color: white; padding: 15px 0; position: relative; white-space: nowrap; display: flex; align-items: center; height: 50px; }
+        .marquee-content { font-size: 24px; font-weight: bold; position: absolute; white-space: nowrap; will-change: transform; }
+        #news-form, #login-section { text-align: center; margin: 20px; }
+        #news-form input, #news-form textarea, #admin-password { width: 90%; max-width: 500px; padding: 10px; margin: 5px 0; display: block; }
+        #news-form button, #logout-button, #login-section button { padding: 10px 15px; background-color: #0044cc; color: white; border: none; cursor: pointer; margin: 10px; }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; align-items: center; }
+            .marquee-content { font-size: 18px; }
         }
     </style>
 </head>
@@ -42,7 +35,7 @@
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>
         <a href="#">Thông Báo</a>
-        <a href="#">Liên Hệ:0967008890 - Admin: Hiếu</a>
+        <a href="#">Liên Hệ: 0967008890 - Admin: Hiếu</a>
     </div>
 
     <div id="login-section">
@@ -68,24 +61,19 @@
             let containerWidth = document.querySelector(".marquee-container").offsetWidth;
             let textWidth = marquee.offsetWidth;
             let position = containerWidth;
-            
             function move() {
                 position -= 2; 
                 if (position < -textWidth) {
                     position = containerWidth;
                 }
-                marquee.style.transform = translateX(${position}px);
+                marquee.style.transform = `translateX(${position}px)`;
                 requestAnimationFrame(move);
             }
-            
             move();
         }
-        
         document.addEventListener("DOMContentLoaded", startMarquee);
-    </script>
-    <script>
+
         const ADMIN_PASSWORD = "Hieu@1990"; 
-        
         function checkLogin() {
             let password = document.getElementById("admin-password").value;
             if (password === ADMIN_PASSWORD) {
@@ -95,12 +83,10 @@
                 alert("Sai mật khẩu!");
             }
         }
-
         function logout() {
             localStorage.removeItem("isAdmin");
             location.reload();
         }
-
         function showAdminPanel() {
             let isAdmin = localStorage.getItem("isAdmin") === "true";
             document.getElementById("login-section").style.display = isAdmin ? "none" : "block";
@@ -110,38 +96,7 @@
                 button.style.display = isAdmin ? "block" : "none";
             });
         }
-
-        function loadNews() {
-            let newsContainer = document.getElementById("news-container");
-            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-
-            newsContainer.innerHTML = "";
-            newsList.forEach((news, index) => {
-                let newAnnouncement = document.createElement("div");
-                newAnnouncement.classList.add("announcement");
-                newAnnouncement.innerHTML = <h3 onclick="toggleNews(${index})" style="cursor:pointer; color:blue;">${news.title}</h3>
-                                            <p id="news-content-${index}" style="display:none;">${news.content}</p>;
-                
-                let deleteButton = document.createElement("button");
-                deleteButton.textContent = "Xóa";
-                deleteButton.classList.add("delete-button");
-                deleteButton.onclick = function() { deleteNews(index); };
-                newAnnouncement.appendChild(deleteButton);
-                
-                let editButton = document.createElement("button");
-                editButton.textContent = "Chỉnh sửa";
-                editButton.classList.add("edit-button");
-                editButton.onclick = function() { editNews(index); };
-                newAnnouncement.appendChild(editButton);
-                
-                newsContainer.prepend(newAnnouncement);
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            loadNews();
-            showAdminPanel();
-        });
+        document.addEventListener("DOMContentLoaded", showAdminPanel);
     </script>
 </body>
 </html>

@@ -5,6 +5,7 @@ body {
     background-color: #f4f4f4;
     overflow-x: hidden;
 }
+
 .marquee-container {
     width: 100%;
     overflow: hidden;

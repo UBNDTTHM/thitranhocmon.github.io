@@ -14,17 +14,17 @@ body {
     white-space: nowrap;
     overflow: hidden;
     position: relative;
+    width: 100%;
 }
 .header span {
     display: inline-block;
-    position: absolute;
     white-space: nowrap;
-    will-change: transform;
     animation: marquee 10s linear infinite;
+    padding-left: 100%;
 }
 @keyframes marquee {
     from {
-        transform: translateX(100%);
+        transform: translateX(0);
     }
     to {
         transform: translateX(-100%);
@@ -61,3 +61,4 @@ body {
     margin: 0;
     color: #003399;
 }
+

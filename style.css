@@ -10,9 +10,10 @@ body {
     width: 100%;
     overflow: hidden;
     background-color: #0033cc; /* Nền xanh */
-    white-space: nowrap;
-    padding: 15px 0; /* Tăng khoảng cách trên dưới */
-    position: relative;
+    padding: 15px 0;
+    position: fixed; /* Cố định vị trí */
+    top: 0;
+    left: 0;
 }
 
 .marquee-content {
@@ -21,15 +22,14 @@ body {
     font-weight: bold;
     color: white; /* Màu chữ */
     text-transform: uppercase;
-    position: absolute;
     white-space: nowrap;
-    will-change: transform;
+    position: absolute;
     animation: marquee 10s linear infinite;
 }
 
 @keyframes marquee {
     from {
-        transform: translateX(100%);
+        transform: translateX(100vw);
     }
     to {
         transform: translateX(-100%);

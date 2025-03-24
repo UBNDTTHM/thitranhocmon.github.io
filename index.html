@@ -66,19 +66,15 @@
             text-align: center;
         }
         .marquee-content {
-            display: inline-block;
-            position: absolute;
-            white-space: nowrap;
-            will-change: transform;
             font-size: 32px;
             font-weight: bold;
         }
     </style>
 </head>
 <body>
-  <div class="marquee-container">
-    <div id="marquee-text" class="marquee-content">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
-</div>
+    <div class="marquee-container">
+        <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
+    </div>
     <div class="navbar">
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>
@@ -99,46 +95,31 @@
             </div>
         </div>
     </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let text1 = document.getElementById("marquee-text");
-        let text2 = document.getElementById("marquee-text-copy");
-        let container = document.querySelector(".marquee-container");
-        
-        let containerWidth = container.offsetWidth;
-        let textWidth = text1.offsetWidth;
-
-        // Đặt vị trí ban đầu cho dòng chữ thứ hai ngay phía sau dòng chữ thứ nhất
-        text1.style.left = "0px";
-        text2.style.left = textWidth + "px";
-
-        function animateMarquee() {
-            let position1 = 0;
-            let position2 = textWidth;
-
-            function step() {
-                position1 -= 2;
-                position2 -= 2;
-
-                if (position1 <= -textWidth) {
-                    position1 = position2 + textWidth;
-                }
-                if (position2 <= -textWidth) {
-                    position2 = position1 + textWidth;
-                }
-
-                text1.style.transform = translateX(${position1}px);
-                text2.style.transform = translateX(${position2}px);
-
-                requestAnimationFrame(step);
-            }
-            step();
+    <script>
+        function searchNews() {
+            let input = document.getElementById("search").value.toLowerCase();
+            let newsItems = document.querySelectorAll(".announcement");
+            newsItems.forEach(item => {
+                let title = item.getAttribute("data-title").toLowerCase();
+                item.style.display = title.includes(input) ? "block" : "none";
+            });
         }
-
-        animateMarquee();
-    });
-</script>
-</body>
-</html>
+        document.addEventListener("DOMContentLoaded", function () {
+            let marquee = document.getElementById("marquee-text");
+            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
+            let textWidth = marquee.offsetWidth;
+            let startPosition = containerWidth;
+            function animateMarquee() {
+                if (startPosition < -textWidth) {
+                    startPosition = containerWidth;
+                } else {
+                    startPosition -= 2;
+                }
+                marquee.style.transform = translateX(${startPosition}px);
+                requestAnimationFrame(animateMarquee);
+            }
+            animateMarquee();
+        });
+    </script>
 </body>
 </html>

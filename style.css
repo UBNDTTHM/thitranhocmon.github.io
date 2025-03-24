@@ -31,3 +31,24 @@ h2 {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff0000; /* Màu nền menu (có thể thay đổi) */
+    padding: 10px 20px;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+
+#search {
+    padding: 8px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    width: 200px; /* Điều chỉnh chiều rộng */
+}

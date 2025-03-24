@@ -91,7 +91,7 @@
         function showAdminButtons() {
             let isAdmin = localStorage.getItem("isAdmin") === "true";
             document.querySelectorAll(".delete-button, .edit-button").forEach(button => {
-                button.style.display = isAdmin ? "block" : "none";
+                button.style.display = isAdmin ? "inline-block" : "none";
             });
         }
 
@@ -120,38 +120,24 @@
                 let deleteButton = document.createElement("button");
                 deleteButton.textContent = "Xóa";
                 deleteButton.classList.add("delete-button");
+                deleteButton.style.display = "inline-block";
                 deleteButton.onclick = function() { deleteNews(index); };
                 newsItem.appendChild(deleteButton);
                 
                 let editButton = document.createElement("button");
                 editButton.textContent = "Chỉnh sửa";
                 editButton.classList.add("edit-button");
+                editButton.style.display = "inline-block";
                 editButton.onclick = function() { editNews(index); };
                 newsItem.appendChild(editButton);
                 
                 newsContainer.prepend(newsItem);
             });
-            showAdminButtons();
-        }
-
-        function startMarquee() {
-            let marquee = document.getElementById("marquee-text");
-            let position = window.innerWidth;
-            function move() {
-                position--;
-                if (position < -marquee.offsetWidth) {
-                    position = window.innerWidth;
-                }
-                marquee.style.transform = `translateX(${position}px)`;
-                requestAnimationFrame(move);
-            }
-            move();
         }
 
         document.addEventListener("DOMContentLoaded", () => {
             showAdminPanel();
             loadNews();
-            startMarquee();
         });
     </script>
 </body>

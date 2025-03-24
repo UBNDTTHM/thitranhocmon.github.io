@@ -39,28 +39,34 @@
         <div id="news-container"></div>
     </div>
 
-    <script>
-        function toggleNews(index) {
-            let content = document.getElementById(`news-content-${index}`);
-            content.style.display = content.style.display === "none" ? "block" : "none";
-        }
+  <script>
+    function toggleNews(index) {
+        let content = document.getElementById(`news-content-${index}`);
+        content.classList.toggle("hidden");
+    }
 
-        function loadNews() {
-            let newsContainer = document.getElementById("news-container");
-            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+    function loadNews() {
+        let newsContainer = document.getElementById("news-container");
+        let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
 
-            newsContainer.innerHTML = "";
-            newsList.forEach((news, index) => {
-                let newAnnouncement = document.createElement("div");
-                newAnnouncement.classList.add("announcement");
-                newAnnouncement.innerHTML = `<h3 onclick="toggleNews(${index})" style="cursor:pointer; color:blue;">${news.title}</h3>
-                                            <p id="news-content-${index}" style="display:none;">${news.content}</p>`;
-                newsContainer.appendChild(newAnnouncement);
-            });
-        }
-        
-        document.addEventListener("DOMContentLoaded", loadNews);
-    </script>
+        newsContainer.innerHTML = "";
+        newsList.forEach((news, index) => {
+            let newAnnouncement = document.createElement("div");
+            newAnnouncement.classList.add("announcement");
+            newAnnouncement.innerHTML = `
+                <h3 onclick="toggleNews(${index})" style="cursor:pointer; color:blue;">${news.title}</h3>
+                <p id="news-content-${index}" class="hidden">${news.content}</p>`;
+
+            newsContainer.appendChild(newAnnouncement);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadNews);
+</script>
+
+<style>
+    .hidden { display: none; }
+</style>
     <div class="marquee-container">
         <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
     </div>

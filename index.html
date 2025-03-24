@@ -5,77 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Thông Tin - Thị Trấn Hóc Môn</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .header {
-            background-color: #0044cc;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            font-size: 24px;
-        }
-        .navbar {
-            background-color: #003399;
-            padding: 10px;
-            text-align: center;
-        }
-        .navbar a {
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-        }
-        .content {
-            padding: 20px;
-        }
-        .announcement {
-            background-color: white;
-            padding: 20px;
-            margin: 15px 0;
-            border-left: 5px solid #cc0000;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        .delete-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            display: none;
-        }
-        .marquee-container {    
-            overflow: hidden;
-            background: #003399;
-            color: white;
-            padding: 15px 0;
-            position: relative;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            height: 50px;
-        }
-        .marquee-content {
-            font-size: 36px;
-            font-weight: bold;
-            position: absolute;
-            white-space: nowrap;
-            will-change: transform;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        .header { background-color: #0044cc; color: white; text-align: center; padding: 20px; font-size: 24px; }
+        .navbar { background-color: #003399; padding: 10px; text-align: center; }
+        .navbar a { color: white; padding: 10px 20px; text-decoration: none; }
+        .content { padding: 20px; }
+        .announcement { background-color: white; padding: 20px; margin: 15px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; }
+        .delete-button, .edit-button { position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
+        .edit-button { right: 70px; background-color: orange; }
     </style>
 </head>
 <body>
-    <div class="marquee-container">
-        <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
-    </div>
-    
     <div id="login-section">
         <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
         <button onclick="checkLogin()">Đăng nhập</button>
@@ -86,13 +26,6 @@
         <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
         <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
         <button onclick="addNews()">Đăng Tin</button>
-    </div>
-
-    <div class="navbar">
-        <a href="#">Giới Thiệu</a>
-        <a href="#">Tin Tức</a>
-        <a href="#">Thông Báo</a>
-        <a href="#">Liên Hệ</a>
     </div>
 
     <div class="content">
@@ -123,7 +56,7 @@
             document.getElementById("login-section").style.display = isAdmin ? "none" : "block";
             document.getElementById("news-form").style.display = isAdmin ? "block" : "none";
             document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
-            document.querySelectorAll(".delete-button").forEach(button => {
+            document.querySelectorAll(".delete-button, .edit-button").forEach(button => {
                 button.style.display = isAdmin ? "block" : "none";
             });
         }
@@ -145,6 +78,12 @@
                 deleteButton.onclick = function() { deleteNews(index); };
                 newAnnouncement.appendChild(deleteButton);
                 
+                let editButton = document.createElement("button");
+                editButton.textContent = "Chỉnh sửa";
+                editButton.classList.add("edit-button");
+                editButton.onclick = function() { editNews(index); };
+                newAnnouncement.appendChild(editButton);
+                
                 newsContainer.prepend(newAnnouncement);
             });
         }
@@ -154,19 +93,38 @@
             contentElement.style.display = contentElement.style.display === "none" ? "block" : "none";
         }
 
+        function editNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+            let newTitle = prompt("Nhập tiêu đề mới:", newsList[index].title);
+            let newContent = prompt("Nhập nội dung mới:", newsList[index].content);
+            
+            if (newTitle !== null && newContent !== null) {
+                newsList[index].title = newTitle;
+                newsList[index].content = newContent;
+                localStorage.setItem("newsData", JSON.stringify(newsList));
+                loadNews();
+            }
+        }
+
+        function deleteNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+            newsList.splice(index, 1);
+            localStorage.setItem("newsData", JSON.stringify(newsList));
+            loadNews();
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             loadNews();
             showAdminPanel();
         });
     </script>
-    <script>
+        <script>
     function startMarquee() {
         let marquee = document.getElementById("marquee-text");
         let containerWidth = document.querySelector(".marquee-container").offsetWidth;
         let textWidth = marquee.offsetWidth;
         let position = containerWidth;
-        
-        function move() {
+           function move() {
             position -= 2; 
             if (position < -textWidth) {
                 position = containerWidth;
@@ -177,8 +135,8 @@
         
         move();
     }
-
     document.addEventListener("DOMContentLoaded", startMarquee);
 </script>
+
 </body>
 </html>

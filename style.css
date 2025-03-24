@@ -1,54 +1,44 @@
 body {
     font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: auto;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+.header {
+    background-color: #0044cc;
+    color: white;
+    text-align: center;
     padding: 20px;
+    font-size: 24px;
 }
-
-h2 {
-    color: #003366;
+.navbar {
+    background-color: #003399;
+    padding: 10px;
+    text-align: center;
 }
-
-.news-title {
-    cursor: pointer;
-    color: blue;
-    text-decoration: underline;
-    margin: 5px 0;
+.navbar a {
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: inline-block;
 }
-
-.news-title:hover {
-    color: darkred;
-}
-.search-container {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-}
-
-#search {
-    padding: 8px;
-    font-size: 16px;
+.navbar input {
+    padding: 5px;
+    margin-left: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-.menu {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #ff0000; /* Màu nền menu (có thể thay đổi) */
-    padding: 10px 20px;
+.content {
+    padding: 20px;
 }
-
-.menu a {
-    color: white;
-    text-decoration: none;
-    padding: 10px;
+.announcement {
+    background-color: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-left: 5px solid #cc0000;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
-
-#search {
-    padding: 8px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    width: 200px; /* Điều chỉnh chiều rộng */
+.announcement h3 {
+    margin: 0;
+    color: #003399;
 }

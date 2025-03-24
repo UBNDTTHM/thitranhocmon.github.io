@@ -61,21 +61,10 @@
     </div>
 </body>
 </html>
-<h2>Thêm Tin Tức</h2>
-<form id="news-form">
-    <label for="title">Tiêu đề:</label>
-    <input type="text" id="title" required><br><br>
+<h2>Tìm Kiếm Tin Tức</h2>
+<input type="text" id="search" placeholder="Nhập tiêu đề cần tìm..." onkeyup="searchNews()"><br><br>
 
-    <label for="summary">Tóm tắt:</label>
-    <input type="text" id="summary" required><br><br>
-
-    <label for="content">Nội dung:</label>
-    <textarea id="content" required></textarea><br><br>
-
-    <button type="submit">Đăng Tin</button>
-</form>
-
-<h2>Danh sách Tin Tức</h2>
+<h2>Danh Sách Tin Tức</h2>
 <div id="news-container"></div>
 
 <script src="script.js"></script>

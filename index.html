@@ -31,21 +31,26 @@
             from { transform: translateX(100%); }
             to { transform: translateX(-100%); }
         }
+         #news-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* Tạo khoảng cách giữa các phần tử */
+    }
         #news-form input, 
-#news-form textarea { 
-    width: 100%; /* Chiều rộng đầy đủ */
-    max-width: 600px; /* Giới hạn tối đa */
-    padding: 10px; /* Tạo khoảng cách bên trong */
-    margin-bottom: 10px; /* Tạo khoảng cách giữa các ô */
-    border: 1px solid #ccc; /* Viền nhẹ */
-    border-radius: 5px; /* Bo tròn góc */
-    font-size: 16px; /* Cỡ chữ dễ nhìn */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+        #news-form textarea { 
+            width: 100%; /* Chiều rộng đầy đủ */
+            max-width: 600px; /* Giới hạn tối đa */
+            padding: 10px; /* Tạo khoảng cách bên trong */
+            margin-bottom: 10px; /* Tạo khoảng cách giữa các ô */
+            border: 1px solid #ccc; /* Viền nhẹ */
+            border-radius: 5px; /* Bo tròn góc */
+            font-size: 16px; /* Cỡ chữ dễ nhìn */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
 }
-
-#news-form textarea {
-    height: 150px; /* Định chiều cao cố định cho ô nhập nội dung */
-    resize: vertical; /* Cho phép kéo giãn theo chiều dọc */
+    #news-form textarea {
+        height: 150px; /* Định chiều cao cố định cho ô nhập nội dung */
+        resize: vertical; /* Cho phép kéo giãn theo chiều dọc */
 }
     </style>
 </head>

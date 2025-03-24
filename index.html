@@ -14,7 +14,10 @@
         .navbar-links { display: flex; justify-content: center; flex-wrap: wrap; }
 
         .content { padding: 20px; }
-        .announcement { background-color: white; padding: 20px; margin: 15px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .announcement { background-color: white; padding: 20px; margin: 15px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; }
+        
+        .delete-button, .edit-button { position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
+        .edit-button { right: 70px; background-color: orange; }
         
         .marquee-container { overflow: hidden; background: #003399; color: white; padding: 15px 0; position: relative; white-space: nowrap; display: flex; align-items: center; height: 50px; }
         .marquee-content { font-size: 24px; font-weight: bold; position: absolute; white-space: nowrap; will-change: transform; }
@@ -129,10 +132,23 @@
                 let newsItem = document.createElement("div");
                 newsItem.classList.add("announcement");
                 newsItem.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
+                
+                let deleteButton = document.createElement("button");
+                deleteButton.textContent = "Xóa";
+                deleteButton.classList.add("delete-button");
+                deleteButton.onclick = function() { deleteNews(index); };
+                newsItem.appendChild(deleteButton);
+                
+                let editButton = document.createElement("button");
+                editButton.textContent = "Chỉnh sửa";
+                editButton.classList.add("edit-button");
+                editButton.onclick = function() { editNews(index); };
+                newsItem.appendChild(editButton);
+                
                 newsContainer.prepend(newsItem);
             });
         }
-
+        
         document.addEventListener("DOMContentLoaded", () => {
             showAdminPanel();
             loadNews();

@@ -5,19 +5,19 @@ body {
     background-color: #f4f4f4;
     overflow-x: hidden;
 }
-
 .marquee-container {
     width: 100%;
-    height: 50px; /* Điều chỉnh chiều cao */
+    height: 60px; /* Tăng chiều cao để tránh bị cắt */
     overflow: hidden;
-    background-color: #0033cc; /* Nền xanh */
+    background-color: #0033cc;
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center; /* Đảm bảo chữ nằm giữa */
 }
 
 .marquee-content {
-    font-size: 32px;
+    font-size: 28px; /* Điều chỉnh kích thước chữ phù hợp */
     font-weight: bold;
     color: white;
     text-transform: uppercase;

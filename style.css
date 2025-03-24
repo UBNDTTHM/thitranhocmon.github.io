@@ -3,25 +3,28 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
-    overflow-x: hidden;
 }
 
+/* Thanh chạy chữ */
 .marquee-container {
-    width: 100%;
-    height: 50px; /* Điều chỉnh chiều cao */
     overflow: hidden;
-    background-color: #0033cc; /* Nền xanh */
+    background: #003399;
+    color: white;
+    padding: 20px 0;
     position: relative;
+    white-space: nowrap;
     display: flex;
     align-items: center;
+}
+
+.marquee-wrapper {
+    display: flex;
+    width: max-content; /* Đảm bảo chứa hai đoạn chữ chạy liên tục */
 }
 
 .marquee-content {
     font-size: 32px;
     font-weight: bold;
-    color: white;
-    text-transform: uppercase;
     white-space: nowrap;
-    position: absolute;
-    will-change: transform;
+    padding-right: 50px; /* Khoảng cách giữa hai đoạn chữ */
 }

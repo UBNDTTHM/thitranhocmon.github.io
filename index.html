@@ -63,6 +63,31 @@
     </div>
 
     <script>
+        const ADMIN_PASSWORD = "Hieu@1990";
+        
+        function checkLogin() {
+            let password = document.getElementById("admin-password").value;
+            if (password === ADMIN_PASSWORD) {
+                localStorage.setItem("isAdmin", "true");
+                showAdminPanel();
+            } else {
+                alert("Sai mật khẩu!");
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("isAdmin");
+            location.reload();
+        }
+
+        function showAdminPanel() {
+            let isAdmin = localStorage.getItem("isAdmin") === "true";
+            document.getElementById("login-section").style.display = isAdmin ? "none" : "block";
+            document.getElementById("news-form").style.display = isAdmin ? "block" : "none";
+            document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
+            showAdminButtons();
+        }
+
         function showAdminButtons() {
             let isAdmin = localStorage.getItem("isAdmin") === "true";
             document.querySelectorAll(".delete-button, .edit-button").forEach(button => {

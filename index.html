@@ -19,7 +19,7 @@
             font-size: 24px;
         }
         .navbar {
-            background-color: red;
+            background-color: #003399;
             padding: 10px;
             text-align: center;
         }
@@ -28,6 +28,10 @@
             padding: 10px 20px;
             text-decoration: none;
         }
+        .navbar input {
+            padding: 5px;
+            margin-left: 10px;
+        }
         .content {
             padding: 20px;
         }
@@ -35,7 +39,7 @@
             background-color: white;
             padding: 15px;
             margin: 10px 0;
-            border-left: 5px solid red;
+            border-left: 5px solid #cc0000;
         }
     </style>
 </head>
@@ -43,28 +47,38 @@
     <div class="header">
         TRANG THÔNG TIN THỊ TRẤN HÓC MÔN
     </div>
-   <nav class="menu">
-    <a href="#">Giới Thiệu</a>
-    <a href="#">Tin Tức</a>
-    <a href="#">Thông Báo</a>
-    <a href="#">Liên Hệ</a>
-    <input type="text" id="search" placeholder="Tìm kiếm tin tức..." onkeyup="searchNews()">
-</nav>
-
-<h2>Danh Sách Tin Tức</h2>
-<div id="news-container"></div>
-
-<script src="script.js"></script>
+    <div class="navbar">
+        <a href="#">Giới Thiệu</a>
+        <a href="#">Tin Tức</a>
+        <a href="#">Thông Báo</a>
+        <a href="#">Liên Hệ</a>
+        <input type="text" id="search" placeholder="Tìm kiếm tin tức..." onkeyup="searchNews()">
+    </div>
+    
     <div class="content">
-        <div class="announcement">
-            <h3>Thông Báo</h3>
-            <p>Thông tin quan trọng từ trang thông tin Thị trấn Hóc Môn.</p>
-        </div>
-        <div class="announcement">
-            <h3>Bản Tin Tuần</h3>
-            <p>Cập nhật các chính sách mới nhất.</p>
+        <h2>Danh Sách Tin Tức</h2>
+        <div id="news-container">
+            <div class="announcement" data-title="Thông Báo Quan Trọng">
+                <h3>Thông Báo Quan Trọng</h3>
+                <p>Cập nhật mới nhất về các chính sách địa phương.</p>
+            </div>
+            <div class="announcement" data-title="Bản Tin Tuần">
+                <h3>Bản Tin Tuần</h3>
+                <p>Các sự kiện và hoạt động đáng chú ý trong tuần.</p>
+            </div>
         </div>
     </div>
+    
+    <script>
+        function searchNews() {
+            let input = document.getElementById("search").value.toLowerCase();
+            let newsItems = document.querySelectorAll(".announcement");
+            
+            newsItems.forEach(item => {
+                let title = item.getAttribute("data-title").toLowerCase();
+                item.style.display = title.includes(input) ? "block" : "none";
+            });
+        }
+    </script>
 </body>
 </html>
-

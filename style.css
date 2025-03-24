@@ -18,17 +18,16 @@ body {
 .header span {
     display: inline-block;
     white-space: nowrap;
+    min-width: 100%;
     animation: marquee 10s linear infinite;
-    position: absolute;
-    will-change: transform;
-    left: 100%;
+    transform: translateX(100%);
 }
 @keyframes marquee {
     from {
-        transform: translateX(0);
+        transform: translateX(100%);
     }
     to {
-        transform: translateX(-100vw);
+        transform: translateX(-100%);
     }
 }
 .navbar {

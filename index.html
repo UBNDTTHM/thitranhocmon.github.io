@@ -41,18 +41,24 @@
 </head>
 <body>
     <div class="header">
-        TRANG THÔNG TIN ĐIỆN TỬ THỊ TRẤN HÓC MÔN
+        TRANG THÔNG TIN THỊ TRẤN HÓC MÔN
     </div>
-    <div class="navbar">
-        <a href="#">Giới Thiệu</a>
-        <a href="#">Tin Tức</a>
-        <a href="#">Thông Báo</a>
-        <a href="#">Liên Hệ</a>
-    </div>
+   <nav class="menu">
+    <a href="#">Giới Thiệu</a>
+    <a href="#">Tin Tức</a>
+    <a href="#">Thông Báo</a>
+    <a href="#">Liên Hệ</a>
+    <input type="text" id="search" placeholder="Tìm kiếm tin tức..." onkeyup="searchNews()">
+</nav>
+
+<h2>Danh Sách Tin Tức</h2>
+<div id="news-container"></div>
+
+<script src="script.js"></script>
     <div class="content">
         <div class="announcement">
             <h3>Thông Báo</h3>
-            <p>Thông tin quan trọng từ Ủy ban Nhân dân Thị trấn Hóc Môn.</p>
+            <p>Thông tin quan trọng từ trang thông tin Thị trấn Hóc Môn.</p>
         </div>
         <div class="announcement">
             <h3>Bản Tin Tuần</h3>
@@ -61,11 +67,4 @@
     </div>
 </body>
 </html>
-<div class="search-container">
-    <input type="text" id="search" placeholder="Nhập tiêu đề cần tìm..." onkeyup="searchNews()">
-</div>
 
-<h2>Danh Sách Tin Tức</h2>
-<div id="news-container"></div>
-
-<script src="script.js"></script>

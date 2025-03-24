@@ -66,15 +66,20 @@
             text-align: center;
         }
         .marquee-content {
+            display: inline-block;
+            position: absolute;
+            white-space: nowrap;
+            will-change: transform;
             font-size: 32px;
             font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="marquee-container">
-        <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
-    </div>
+  <div class="marquee-container">
+    <div id="marquee-text" class="marquee-content">Dòng chữ chạy liên tục không bị trễ</div>
+    <div id="marquee-text-copy" class="marquee-content">Dòng chữ chạy liên tục không bị trễ</div>
+</div>
     <div class="navbar">
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>
@@ -97,21 +102,35 @@
     </div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let marqueeText = document.getElementById("marquee-text");
+        let text1 = document.getElementById("marquee-text");
+        let text2 = document.getElementById("marquee-text-copy");
         let container = document.querySelector(".marquee-container");
+        
         let containerWidth = container.offsetWidth;
-        let textWidth = marqueeText.offsetWidth;
-        let startPosition = containerWidth;
-        let endPosition = -textWidth;
+        let textWidth = text1.offsetWidth;
+
+        // Đặt vị trí ban đầu cho dòng chữ thứ hai ngay phía sau dòng chữ thứ nhất
+        text1.style.left = "0px";
+        text2.style.left = textWidth + "px";
 
         function animateMarquee() {
-            let currentPosition = startPosition;
+            let position1 = 0;
+            let position2 = textWidth;
+
             function step() {
-                currentPosition -= 2; // Điều chỉnh tốc độ chạy
-                if (currentPosition <= endPosition) {
-                    currentPosition = containerWidth + 5; // Xuất hiện ngay lập tức mà không bị trễ
+                position1 -= 2;
+                position2 -= 2;
+
+                if (position1 <= -textWidth) {
+                    position1 = position2 + textWidth;
                 }
-                marqueeText.style.transform = `translateX(${currentPosition}px)`;
+                if (position2 <= -textWidth) {
+                    position2 = position1 + textWidth;
+                }
+
+                text1.style.transform = `translateX(${position1}px)`;
+                text2.style.transform = `translateX(${position2}px)`;
+
                 requestAnimationFrame(step);
             }
             step();

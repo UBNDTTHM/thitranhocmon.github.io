@@ -54,3 +54,20 @@ function searchNews() {
         newsContainer.appendChild(newsItem);
     });
 }
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let marquee = document.querySelector(".marquee-content");
+    marquee.style.position = "absolute";
+    let startPosition = window.innerWidth;
+    function animateMarquee() {
+        if (startPosition < -marquee.offsetWidth) {
+            startPosition = window.innerWidth;
+        } else {
+            startPosition -= 2; // Điều chỉnh tốc độ
+        }
+        marquee.style.transform = `translateX(${startPosition}px)`;
+        requestAnimationFrame(animateMarquee);
+    }
+    animateMarquee();
+});
+</script>

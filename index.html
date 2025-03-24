@@ -11,121 +11,61 @@
             padding: 0;
             background-color: #f4f4f4;
         }
-        .header {
-            background-color: #0044cc;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            font-size: 24px;
-        }
-        .navbar {
-            background-color: #003399;
-            padding: 10px;
-            text-align: center;
-        }
-        .navbar a {
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-        }
-        .navbar input {
-            padding: 5px;
-            margin-left: 10px;
-        }
-        .content {
-            padding: 20px;
-        }
-        .announcement {
-            background-color: white;
-            padding: 20px;
-            margin: 15px 0;
-            border-left: 5px solid #cc0000;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .announcement:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-        }
-        .announcement h3 {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .announcement p {
-            font-size: 16px;
-            color: #333;
-        }
         .marquee-container {
-        overflow: hidden;
-        background: #003399;
-        color: white;
-        padding: 20px 0;
-        position: relative;
-        white-space: nowrap;
-        display: flex;
-    }
-    .marquee-content {
-        font-size: 32px;
-        font-weight: bold;
-        white-space: nowrap;
-        display: inline-block;
-        min-width: 100%;
-    }
+            overflow: hidden;
+            background: #003399;
+            color: white;
+            padding: 20px 0;
+            position: relative;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+        .marquee-wrapper {
+            display: flex;
+            width: max-content;
+        }
+        .marquee-content {
+            font-size: 32px;
+            font-weight: bold;
+            white-space: nowrap;
+            padding-right: 50px; /* Khoảng cách giữa hai phần tử */
+        }
     </style>
 </head>
 <body>
-   <div class="marquee-container">
-    <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
-    <div class="marquee-content" id="marquee-text-clone">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
-</div>
-    <div class="navbar">
-        <a href="#">Giới Thiệu</a>
-        <a href="#">Tin Tức</a>
-        <a href="#">Thông Báo</a>
-        <a href="#">Liên Hệ</a>
-        <input type="text" id="search" placeholder="Tìm kiếm tin tức..." onkeyup="searchNews()">
-    </div>
-    <div class="content">
-        <h2>Danh Sách Tin Tức</h2>
-        <div id="news-container">
-            <div class="announcement" data-title="Thông Báo Quan Trọng">
-                <h3>Thông Báo Quan Trọng</h3>
-                <p>Cập nhật mới nhất về các chính sách địa phương.</p>
-            </div>
-            <div class="announcement" data-title="Bản Tin Tuần">
-                <h3>Bản Tin Tuần</h3>
-                <p>Các sự kiện và hoạt động đáng chú ý trong tuần.</p>
-            </div>
+
+    <div class="marquee-container">
+        <div class="marquee-wrapper" id="marquee">
+            <div class="marquee-content">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
+            <div class="marquee-content">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
         </div>
     </div>
-   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let marquee1 = document.getElementById("marquee-text");
-        let marquee2 = document.getElementById("marquee-text-clone");
 
-        let speed = 2;
-        let position1 = 0;
-        let position2 = marquee1.offsetWidth; // Cái thứ hai bắt đầu ngay sau cái đầu tiên
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let marquee = document.getElementById("marquee");
+            let speed = 2; // Tốc độ chạy chữ
+            let marqueeWidth = marquee.scrollWidth / 2; // Độ dài thực tế của một chuỗi chữ
 
-        function animateMarquee() {
-            position1 -= speed;
-            position2 -= speed;
+            function animateMarquee() {
+                let currentPosition = parseFloat(getComputedStyle(marquee).transform.split(',')[4]) || 0;
+                currentPosition -= speed;
+                
+                if (currentPosition <= -marqueeWidth) {
+                    currentPosition = 0; // Khi chạy hết một đoạn, đặt lại vị trí
+                }
 
-            if (position1 <= -marquee1.offsetWidth) {
-                position1 = position2 + marquee1.offsetWidth;
+                marquee.style.transform = `translateX(${currentPosition}px)`;
+                requestAnimationFrame(animateMarquee);
             }
-            if (position2 <= -marquee2.offsetWidth) {
-                position2 = position1 + marquee2.offsetWidth;
-            }
 
-            marquee1.style.transform = `translateX(${position1}px)`;
-            marquee2.style.transform = `translateX(${position2}px)`;
+            animateMarquee();
+        });
+    </script>
 
-            requestAnimationFrame(animateMarquee);
-        }
-        animateMarquee();
-    });
+</body>
+</html>
 </script>
 </body>
 </html>

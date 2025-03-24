@@ -19,3 +19,15 @@ h2 {
 .news-title:hover {
     color: darkred;
 }
+.search-container {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+#search {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

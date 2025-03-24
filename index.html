@@ -83,7 +83,10 @@
         <a href="#">Tin Tức</a>
         <a href="#">Thông Báo</a>
         <a href="#">Liên Hệ</a>
-        <input type="text" id="search" placeholder="Tìm kiếm tin tức..." onkeyup="searchNews()">
+    <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
+    <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
+    <button onclick="addNews()">Đăng Tin</button>
+    <input type="text" id="search" placeholder="Tìm kiếm tin tức..." onkeyup="searchNews()">
     </div>
     <div class="content">
         <h2>Danh Sách Tin Tức</h2>
@@ -121,6 +124,44 @@
 
         animateMarquee();
     });
+</script>
+    <script>
+    function loadNews() {
+        let newsContainer = document.getElementById("news-container");
+        let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+
+        newsContainer.innerHTML = ""; // Xóa nội dung cũ để cập nhật lại từ LocalStorage
+
+        newsList.forEach(news => {
+            let newAnnouncement = document.createElement("div");
+            newAnnouncement.classList.add("announcement");
+            newAnnouncement.setAttribute("data-title", news.title);
+            newAnnouncement.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
+            newsContainer.prepend(newAnnouncement);
+        });
+    }
+
+    function addNews() {
+        let title = document.getElementById("news-title").value;
+        let content = document.getElementById("news-content").value;
+
+        if (title.trim() === "" || content.trim() === "") {
+            alert("Vui lòng nhập đầy đủ tiêu đề và nội dung!");
+            return;
+        }
+
+        let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+        newsList.push({ title, content });
+
+        localStorage.setItem("newsData", JSON.stringify(newsList));
+        loadNews(); // Hiển thị lại danh sách tin tức
+
+        // Xóa nội dung nhập sau khi đăng tin
+        document.getElementById("news-title").value = "";
+        document.getElementById("news-content").value = "";
+    }
+
+    document.addEventListener("DOMContentLoaded", loadNews);
 </script>
 </body>
 </html>

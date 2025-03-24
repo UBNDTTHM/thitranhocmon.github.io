@@ -5,31 +5,30 @@ body {
     background-color: #f4f4f4;
     overflow-x: hidden;
 }
-
 .marquee-container {
     width: 100%;
+    height: 50px; /* Điều chỉnh chiều cao */
     overflow: hidden;
     background-color: #0033cc; /* Nền xanh */
-    padding: 15px 0;
-    position: fixed; /* Cố định vị trí */
-    top: 0;
-    left: 0;
+    display: flex;
+    align-items: center; /* Căn giữa chữ theo chiều dọc */
+    position: relative;
 }
 
 .marquee-content {
-    display: inline-block;
-    font-size: 32px; /* Kích thước chữ lớn hơn */
+    font-size: 32px;
     font-weight: bold;
-    color: white; /* Màu chữ */
+    color: white;
     text-transform: uppercase;
     white-space: nowrap;
     position: absolute;
+    will-change: transform;
     animation: marquee 10s linear infinite;
 }
 
 @keyframes marquee {
     from {
-        transform: translateX(100vw);
+        transform: translateX(100%);
     }
     to {
         transform: translateX(-100%);

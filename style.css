@@ -3,22 +3,28 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
-    overflow-x: hidden;
 }
-        }
-        .marquee-container {
-        overflow: hidden;
-        background: #003399;
-        color: white;
-        padding: 20px 0;
-        position: relative;
-        white-space: nowrap;
-        display: flex;
-    }
-    .marquee-content {
-        font-size: 32px;
-        font-weight: bold;
-        white-space: nowrap;
-        display: inline-block;
-        min-width: 100%;
-    }
+
+/* Thanh chạy chữ */
+.marquee-container {
+    overflow: hidden;
+    background: #003399;
+    color: white;
+    padding: 20px 0;
+    position: relative;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.marquee-wrapper {
+    display: flex;
+    width: max-content; /* Đảm bảo chứa hai đoạn chữ chạy liên tục */
+}
+
+.marquee-content {
+    font-size: 32px;
+    font-weight: bold;
+    white-space: nowrap;
+    padding-right: 50px; /* Khoảng cách giữa hai đoạn chữ */
+}

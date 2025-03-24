@@ -65,6 +65,7 @@
         <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
         <button onclick="checkLogin()">Đăng nhập</button>
     </div>
+    <button id="logout-button" style="display: none;" onclick="logout()">Thoát</button>
 
     <div id="news-form" style="display: none;">
         <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
@@ -122,12 +123,19 @@
             }
         }
 
+        function logout() {
+            localStorage.removeItem("isAdmin");
+            location.reload();
+        }
+
         function showAdminPanel() {
             if (localStorage.getItem("isAdmin") === "true") {
                 document.getElementById("login-section").style.display = "none";
                 document.getElementById("news-form").style.display = "block";
+                document.getElementById("logout-button").style.display = "block";
             } else {
                 document.getElementById("news-form").style.display = "none";
+                document.getElementById("logout-button").style.display = "none";
             }
         }
 

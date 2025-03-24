@@ -56,22 +56,22 @@
             font-size: 16px;
             color: #333;
         }
-        .marquee-container {    
+        .marquee-container {
             overflow: hidden;
             background: #003399;
             color: white;
             padding: 20px 0;
-            position: relative;
             white-space: nowrap;
-            text-align: center;
+            position: relative;
+            display: flex;
         }
         .marquee-content {
-            display: inline-block;
-            position: absolute;
+            display: flex;
             white-space: nowrap;
-            will-change: transform;
             font-size: 32px;
             font-weight: bold;
+            position: absolute;
+            animation: marquee 10s linear infinite;
         }
     </style>
 </head>

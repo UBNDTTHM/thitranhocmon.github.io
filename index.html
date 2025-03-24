@@ -95,7 +95,7 @@
             </div>
         </div>
     </div>
-  <script>
+ <script>
     document.addEventListener("DOMContentLoaded", function () {
         let marqueeText = document.getElementById("marquee-text");
         let containerWidth = document.querySelector(".marquee-container").offsetWidth;
@@ -108,7 +108,7 @@
             function step() {
                 currentPosition -= 2; // Điều chỉnh tốc độ chạy
                 if (currentPosition <= endPosition) {
-                    currentPosition = startPosition;
+                    currentPosition = containerWidth; // Đặt lại ngay lập tức để tránh trễ
                 }
                 marqueeText.style.transform = `translateX(${currentPosition}px)`;
                 requestAnimationFrame(step);

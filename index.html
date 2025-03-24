@@ -56,25 +56,29 @@
             font-size: 16px;
             color: #333;
         }
-        .marquee-container {    
-            overflow: hidden;
-            background: #003399;
-            color: white;
-            padding: 20px 0;
-            position: relative;
-            white-space: nowrap;
-            text-align: center;
-        }
-        .marquee-content {
-            font-size: 32px;
-            font-weight: bold;
-        }
+        .marquee-container {
+        overflow: hidden;
+        background: #003399;
+        color: white;
+        padding: 20px 0;
+        position: relative;
+        white-space: nowrap;
+        display: flex;
+    }
+    .marquee-content {
+        font-size: 32px;
+        font-weight: bold;
+        white-space: nowrap;
+        display: inline-block;
+        min-width: 100%;
+    }
     </style>
 </head>
 <body>
-    <div class="marquee-container">
-        <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
-    </div>
+   <div class="marquee-container">
+    <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
+    <div class="marquee-content" id="marquee-text-clone">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
+</div>
     <div class="navbar">
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>
@@ -95,25 +99,28 @@
             </div>
         </div>
     </div>
-    <script>
+   <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let marquee = document.getElementById("marquee-text");
-        let container = document.querySelector(".marquee-container");
+        let marquee1 = document.getElementById("marquee-text");
+        let marquee2 = document.getElementById("marquee-text-clone");
 
-        // Tạo bản sao nội dung để tạo hiệu ứng liên tục
-        let clone = marquee.cloneNode(true);
-        container.appendChild(clone);
-
-        let position = 0;
         let speed = 2;
+        let position1 = 0;
+        let position2 = marquee1.offsetWidth; // Cái thứ hai bắt đầu ngay sau cái đầu tiên
 
         function animateMarquee() {
-            position -= speed;
-            if (position <= -marquee.offsetWidth) {
-                position = 0; // Khi văn bản đầu tiên đi hết, lập tức reset vị trí
+            position1 -= speed;
+            position2 -= speed;
+
+            if (position1 <= -marquee1.offsetWidth) {
+                position1 = position2 + marquee1.offsetWidth;
             }
-            marquee.style.transform = `translateX(${position}px)`;
-            clone.style.transform = `translateX(${position + marquee.offsetWidth}px)`;
+            if (position2 <= -marquee2.offsetWidth) {
+                position2 = position1 + marquee2.offsetWidth;
+            }
+
+            marquee1.style.transform = `translateX(${position1}px)`;
+            marquee2.style.transform = `translateX(${position2}px)`;
 
             requestAnimationFrame(animateMarquee);
         }

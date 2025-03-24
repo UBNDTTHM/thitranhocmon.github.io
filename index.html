@@ -38,6 +38,18 @@
             border-left: 5px solid #cc0000;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            display: none;
         }
         .marquee-container {    
             overflow: hidden;
@@ -86,31 +98,6 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let marqueeText = document.getElementById("marquee-text");
-            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
-            let textWidth = marqueeText.offsetWidth;
-            let startPosition = containerWidth;
-            let endPosition = -textWidth;
-
-            function animateMarquee() {
-                let currentPosition = startPosition;
-                function step() {
-                    currentPosition -= 2;
-                    if (currentPosition <= endPosition) {
-                        currentPosition = startPosition;
-                    }
-                    marqueeText.style.transform = `translateX(${currentPosition}px)`;
-                    requestAnimationFrame(step);
-                }
-                step();
-            }
-
-            animateMarquee();
-        });
-    </script>
-    
-    <script>
         const ADMIN_PASSWORD = "Hieu@1990"; 
         
         function checkLogin() {
@@ -129,14 +116,13 @@
         }
 
         function showAdminPanel() {
-            if (localStorage.getItem("isAdmin") === "true") {
-                document.getElementById("login-section").style.display = "none";
-                document.getElementById("news-form").style.display = "block";
-                document.getElementById("logout-button").style.display = "block";
-            } else {
-                document.getElementById("news-form").style.display = "none";
-                document.getElementById("logout-button").style.display = "none";
-            }
+            let isAdmin = localStorage.getItem("isAdmin") === "true";
+            document.getElementById("login-section").style.display = isAdmin ? "none" : "block";
+            document.getElementById("news-form").style.display = isAdmin ? "block" : "none";
+            document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
+            document.querySelectorAll(".delete-button").forEach(button => {
+                button.style.display = isAdmin ? "block" : "none";
+            });
         }
 
         function loadNews() {
@@ -144,12 +130,26 @@
             let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
 
             newsContainer.innerHTML = "";
-            newsList.forEach(news => {
+            newsList.forEach((news, index) => {
                 let newAnnouncement = document.createElement("div");
                 newAnnouncement.classList.add("announcement");
                 newAnnouncement.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
+                
+                let deleteButton = document.createElement("button");
+                deleteButton.textContent = "Xóa";
+                deleteButton.classList.add("delete-button");
+                deleteButton.onclick = function() { deleteNews(index); };
+                newAnnouncement.appendChild(deleteButton);
+                
                 newsContainer.prepend(newAnnouncement);
             });
+        }
+
+        function deleteNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+            newsList.splice(index, 1);
+            localStorage.setItem("newsData", JSON.stringify(newsList));
+            loadNews();
         }
 
         function addNews() {

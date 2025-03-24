@@ -5,14 +5,15 @@ body {
     background-color: #f4f4f4;
     overflow-x: hidden;
 }
+
 .marquee-container {
     width: 100%;
     height: 50px; /* Điều chỉnh chiều cao */
     overflow: hidden;
     background-color: #0033cc; /* Nền xanh */
-    display: flex;
-    align-items: center; /* Căn giữa chữ theo chiều dọc */
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .marquee-content {
@@ -23,14 +24,4 @@ body {
     white-space: nowrap;
     position: absolute;
     will-change: transform;
-    animation: marquee 10s linear infinite;
-}
-
-@keyframes marquee {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(-100%);
-    }
 }

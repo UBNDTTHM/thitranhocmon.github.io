@@ -52,6 +52,23 @@
                 alert("Sai thông tin đăng nhập!");
             }
         }
+function login() {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+
+        if (username === "admin" && password === "Hieu@1990") {
+            localStorage.setItem("loggedIn", "true");
+            window.location.href = "admin.html"; // Chuyển hướng đến trang admin
+        } else {
+            alert("Sai tên đăng nhập hoặc mật khẩu!");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        if (localStorage.getItem("loggedIn") === "true") {
+            window.location.href = "admin.html"; // Nếu đã đăng nhập, chuyển hướng luôn
+        }
+    });
         function showForm(index = -1) {
             document.getElementById("newsForm").classList.remove("hidden");
         }

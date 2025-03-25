@@ -160,33 +160,30 @@
         <button onclick="saveNews()">Lưu tin bài</button>
         <button onclick="hideNewsForm()">Hủy</button>
     </div>
-    <script>
-    async function loadPublishedNews() {
-        try {
-            let response = await fetch("https://raw.githubusercontent.com/USERNAME/REPO/main/news.json");
-            let newsList = await response.json();
+   <input type="text" id="newsImage" placeholder="Nhập URL ảnh (tùy chọn)">
+<button onclick="saveNews()">Lưu tin</button>
 
-            let newsListDiv = document.getElementById("news-list");
-            newsListDiv.innerHTML = "";
+<script>
+    function saveNews() {
+        let title = document.getElementById("newsTitle").value;
+        let summary = document.getElementById("newsSummary").value;
+        let image = document.getElementById("newsImage").value;
+        let date = new Date().toLocaleDateString();
 
-            newsList.forEach(news => {
-                let newsItem = document.createElement("div");
-                newsItem.classList.add("news-item");
-                newsItem.innerHTML = `
-                    <h2>${news.title}</h2>
-                    <p>${news.summary}</p>
-                    ${news.image ? `<img src="${news.image}" alt="Hình ảnh" style="max-width:100%; border-radius: 8px;">` : ""}
-                    <p class="date">Ngày đăng: ${news.date}</p>
-                `;
-                newsListDiv.appendChild(newsItem);
-            });
-        } catch (error) {
-            console.error("Lỗi tải tin tức:", error);
-            document.getElementById("news-list").innerHTML = "<p>Lỗi tải tin tức!</p>";
+        if (title && summary) {
+            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+            newsList.push({ title, summary, image, date });
+
+            let jsonContent = JSON.stringify(newsList, null, 4);
+            let blob = new Blob([jsonContent], { type: "application/json" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "news.json";
+            a.click();
+
+            alert("Hãy tải file này lên GitHub để cập nhật tin tức!");
         }
     }
-
-    loadPublishedNews();
 </script>
     <script>
         let editingIndex = -1;

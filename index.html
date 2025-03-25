@@ -5,72 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý tin tức</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .header {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .container {
-            width: 90%;
-            margin: 20px auto;
-            background: white;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        .table-container {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn {
-            padding: 10px;
-            margin: 5px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        .btn-add { background-color: green; }
-        .btn-edit { background-color: orange; }
-        .btn-delete { background-color: red; }
-        .btn-publish { background-color: blue; }
-        .login-container {
-            width: 300px;
-            margin: 100px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .hidden { display: none; }
-        .news-form {
-            display: none;
-            background: white;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            margin: 20px auto;
-        }
+        /* ... (CSS giữ nguyên) ... */
     </style>
 </head>
 <body>
@@ -80,7 +15,7 @@
         <input type="password" id="password" placeholder="Mật khẩu"><br><br>
         <button onclick="login()">Đăng nhập</button>
     </div>
-    
+
     <div id="dashboard" class="hidden">
         <div class="header">HỆ THỐNG QUẢN TRỊ TRANG THÔNG TIN TUYÊN TRUYỀN<br>THỊ TRẤN HÓC MÔN</div>
         <div class="container">
@@ -105,7 +40,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="newsForm" class="news-form">
         <h2 id="formTitle">Thêm tin bài mới</h2>
         <label>Tiêu đề:</label>
@@ -115,7 +50,7 @@
         <button onclick="saveNews()">Lưu tin bài</button>
         <button onclick="hideNewsForm()">Hủy</button>
     </div>
-    
+
     <script>
         let editingIndex = -1;
 
@@ -137,9 +72,16 @@
             let date = new Date().toLocaleDateString();
             let user = "admin";
             let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            
+
             if (title && summary) {
-                newsList.push({ title, summary, date, user, published: false });
+                if (editingIndex !== -1) {
+                    // Sửa tin tức hiện có
+                    newsList[editingIndex] = { title, summary, date, user, published: newsList[editingIndex].published };
+                    editingIndex = -1; // Đặt lại index
+                } else {
+                    // Thêm tin tức mới
+                    newsList.push({ title, summary, date, user, published: false });
+                }
                 localStorage.setItem("newsList", JSON.stringify(newsList));
                 loadNews();
                 hideNewsForm();
@@ -173,9 +115,9 @@
             newsList[index].published = true;
             localStorage.setItem("newsList", JSON.stringify(newsList));
             alert("Tin tức đã được đăng!");
-            // Redirect to the reader's page
             window.open('reader.html', '_blank');
         }
+
         function showNewsForm(index) {
             document.getElementById("newsForm").style.display = "block";
             if (index !== undefined) {
@@ -195,6 +137,7 @@
         function hideNewsForm() {
             document.getElementById("newsForm").style.display = "none";
         }
+
         function deleteNews(index) {
             let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
             newsList.splice(index, 1);

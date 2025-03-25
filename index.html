@@ -12,24 +12,23 @@
         .content { padding: 15px; }
         
         .marquee-container {
-        overflow: hidden;
-        background: #003399;
-        color: white;
-        padding: 15px 0;
-        display: flex;
-        align-items: center;
-        position: relative;
-        width: 100vw; /* Chiều rộng toàn bộ màn hình */
-        height: 60px; /* Điều chỉnh chiều cao nền xanh có chữ chạy*/
-        white-space: nowrap;
+            overflow: hidden;
+            background: #003399;
+            color: white;
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 100vw;
+            height: 60px;
+            white-space: nowrap;
         }
-    
-    .marquee-content {
-        font-size: 36px; /* Điều chỉnh kích thước chữ chạy */
-        font-weight: bold;
-        position: absolute;
-        white-space: nowrap;
-        will-change: transform;
+        .marquee-content {
+            font-size: 36px;
+            font-weight: bold;
+            position: absolute;
+            white-space: nowrap;
+            will-change: transform;
         }
         #login-section { display: flex; justify-content: flex-end; align-items: center; padding: 10px; }
         #login-section input { padding: 8px; margin-right: 10px; width: 200px; max-width: 100%; }
@@ -39,7 +38,9 @@
         .delete-button, .edit-button { position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
         .edit-button { right: 70px; background-color: orange; }
         
-        /* Responsive Design */
+        #news-form { display: none; margin: 20px 0; }
+        #news-form input, #news-form textarea { display: block; width: 100%; margin-bottom: 10px; padding: 10px; }
+        
         @media (max-width: 768px) {
             .navbar { flex-direction: column; }
             .navbar a { padding: 8px; text-align: center; }
@@ -57,7 +58,7 @@
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>
         <a href="#">Thông Báo</a>
-        <a href="#">Liên Hệ: 0967008890 - Admin: Hiếu</a>
+        <a href="#">Liên Hệ</a>
     </div>
 
     <div id="login-section">
@@ -66,7 +67,8 @@
     </div>
     
     <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
-    <div id="news-form" style="display: none;">
+    
+    <div id="news-form">
         <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
         <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
         <button onclick="addNews()">Đăng Tin</button>
@@ -79,26 +81,24 @@
 
     <script>
         function startMarquee() {
-        let marquee = document.getElementById("marquee-text");
-        let container = document.querySelector(".marquee-container");
+            let marquee = document.getElementById("marquee-text");
+            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
+            let textWidth = marquee.offsetWidth;
+            let position = containerWidth;
 
-        let containerWidth = container.offsetWidth;
-        let textWidth = marquee.offsetWidth;
-        let position = containerWidth; // Bắt đầu ngoài màn hình bên phải
-
-        function move() {
-            position -= 2; // Điều chỉnh tốc độ chạy của chữ đang chạy
-            if (position < -textWidth) {
-                position = containerWidth; // Reset vị trí khi chữ chạy hết
+            function move() {
+                position -= 2;
+                if (position < -textWidth) {
+                    position = containerWidth;
+                }
+                marquee.style.transform = `translateX(${position}px)`;
+                requestAnimationFrame(move);
             }
-            marquee.style.transform = `translateX(${position}px)`;
-            requestAnimationFrame(move);
+            move();
         }
-
-        move();
-    }
         
         document.addEventListener("DOMContentLoaded", startMarquee);
+
         const ADMIN_PASSWORD = "Hieu@1990";
         
         function checkLogin() {
@@ -125,34 +125,24 @@
                 button.style.display = isAdmin ? "block" : "none";
             });
         }
-        
+
+        function addNews() {
+            let title = document.getElementById("news-title").value;
+            let content = document.getElementById("news-content").value;
+            if (title && content) {
+                let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+                newsList.push({ title, content });
+                localStorage.setItem("newsData", JSON.stringify(newsList));
+                loadNews();
+            }
+        }
+
         function loadNews() {
             let newsContainer = document.getElementById("news-container");
             let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-
-            newsContainer.innerHTML = "";
-            newsList.forEach((news, index) => {
-                let newAnnouncement = document.createElement("div");
-                newAnnouncement.classList.add("announcement");
-                newAnnouncement.innerHTML = `<h3 onclick="toggleNews(${index})" style="cursor:pointer; color:blue;">${news.title}</h3>
-                                            <p id="news-content-${index}" style="display:none;">${news.content}</p>`;
-                
-                let deleteButton = document.createElement("button");
-                deleteButton.textContent = "Xóa";
-                deleteButton.classList.add("delete-button");
-                deleteButton.onclick = function() { deleteNews(index); };
-                newAnnouncement.appendChild(deleteButton);
-                
-                let editButton = document.createElement("button");
-                editButton.textContent = "Chỉnh sửa";
-                editButton.classList.add("edit-button");
-                editButton.onclick = function() { editNews(index); };
-                newAnnouncement.appendChild(editButton);
-                
-                newsContainer.prepend(newAnnouncement);
-            });
+            newsContainer.innerHTML = newsList.map(news => `<div class='announcement'><h3>${news.title}</h3><p>${news.content}</p></div>`).join('');
         }
-
+        
         document.addEventListener("DOMContentLoaded", () => {
             loadNews();
             showAdminPanel();

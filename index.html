@@ -9,10 +9,20 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 20px;
+            font-weight: bold;
         }
         .login-container {
             background: white;
@@ -21,6 +31,7 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             width: 350px;
             text-align: center;
+            margin-top: 20px;
         }
         .login-container h2 {
             margin-bottom: 20px;
@@ -40,14 +51,6 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .captcha {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .captcha img {
-            height: 40px;
-        }
         .btn {
             background-color: #007bff;
             color: white;
@@ -60,12 +63,9 @@
     </style>
 </head>
 <body>
+    <div class="header">TRANG THÔNG TIN TUYÊN TRUYỀN THỊ TRẤN HÓC MÔN</div>
     <div class="login-container">
         <h2>Đăng nhập hệ thống</h2>
-        <div class="input-group">
-            <label for="unitCode">Mã đơn vị</label>
-            <input type="text" id="unitCode" placeholder="Nhập mã đơn vị">
-        </div>
         <div class="input-group">
             <label for="username">Thông tin tài khoản</label>
             <input type="text" id="username" placeholder="Tên đăng nhập">
@@ -73,10 +73,6 @@
         <div class="input-group">
             <label for="password">Mật khẩu</label>
             <input type="password" id="password" placeholder="Mật khẩu">
-        </div>
-        <div class="input-group captcha">
-            <img src="captcha.png" alt="Mã bảo vệ">
-            <input type="text" id="captcha" placeholder="Nhập mã bảo vệ">
         </div>
         <button class="btn" onclick="login()">Đăng nhập</button>
     </div>

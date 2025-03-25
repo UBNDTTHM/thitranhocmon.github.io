@@ -10,7 +10,6 @@
         .navbar { background-color: #003399; padding: 10px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; }
         .navbar a { color: white; padding: 10px 15px; text-decoration: none; display: block; }
         .content { padding: 15px; }
-        
         .marquee-container {
             overflow: hidden;
             background: #003399;
@@ -30,23 +29,11 @@
             white-space: nowrap;
             will-change: transform;
         }
-        #login-section { display: flex; justify-content: flex-end; align-items: center; padding: 10px; }
-        #login-section input { padding: 8px; margin-right: 10px; width: 200px; max-width: 100%; }
-        #login-section button { padding: 8px; cursor: pointer; }
-        
         .announcement { background: white; padding: 15px; margin: 10px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; }
         .delete-button, .edit-button { position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
         .edit-button { right: 70px; background-color: orange; }
-        
         #news-form { display: none; margin: 20px 0; }
         #news-form input, #news-form textarea { display: block; width: 100%; margin-bottom: 10px; padding: 10px; }
-        
-        @media (max-width: 768px) {
-            .navbar { flex-direction: column; }
-            .navbar a { padding: 8px; text-align: center; }
-            #login-section { justify-content: center; flex-direction: column; align-items: center; }
-            #login-section input { width: 90%; }
-        }
     </style>
 </head>
 <body>
@@ -80,30 +67,14 @@
     </div>
 
     <script>
-        function startMarquee() {
-            let marquee = document.getElementById("marquee-text");
-            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
-            let textWidth = marquee.offsetWidth;
-            let position = containerWidth;
+        document.addEventListener("DOMContentLoaded", () => {
+            loadNews();
+            showAdminPanel();
+        });
 
-            function move() {
-                position -= 2;
-                if (position < -textWidth) {
-                    position = containerWidth;
-                }
-                marquee.style.transform = `translateX(${position}px)`;
-                requestAnimationFrame(move);
-            }
-            move();
-        }
-        
-        document.addEventListener("DOMContentLoaded", startMarquee);
-
-        const ADMIN_PASSWORD = "Hieu@1990";
-        
         function checkLogin() {
             let password = document.getElementById("admin-password").value;
-            if (password === ADMIN_PASSWORD) {
+            if (password === "Hieu@1990") {
                 localStorage.setItem("isAdmin", "true");
                 showAdminPanel();
             } else {
@@ -118,7 +89,6 @@
 
         function showAdminPanel() {
             let isAdmin = localStorage.getItem("isAdmin") === "true";
-            document.getElementById("login-section").style.display = isAdmin ? "none" : "flex";
             document.getElementById("news-form").style.display = isAdmin ? "block" : "none";
             document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
             document.querySelectorAll(".delete-button, .edit-button").forEach(button => {
@@ -140,13 +110,36 @@
         function loadNews() {
             let newsContainer = document.getElementById("news-container");
             let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-            newsContainer.innerHTML = newsList.map(news => `<div class='announcement'><h3>${news.title}</h3><p>${news.content}</p></div>`).join('');
+            newsContainer.innerHTML = "";
+            newsList.forEach((news, index) => {
+                let newsItem = document.createElement("div");
+                newsItem.classList.add("announcement");
+                newsItem.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>
+                    <button class='edit-button' onclick='editNews(${index})'>Chỉnh sửa</button>
+                    <button class='delete-button' onclick='deleteNews(${index})'>Xóa</button>`;
+                newsContainer.appendChild(newsItem);
+            });
         }
-        
-        document.addEventListener("DOMContentLoaded", () => {
-            loadNews();
-            showAdminPanel();
-        });
+
+        function editNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+            let newTitle = prompt("Chỉnh sửa tiêu đề:", newsList[index].title);
+            let newContent = prompt("Chỉnh sửa nội dung:", newsList[index].content);
+            if (newTitle && newContent) {
+                newsList[index] = { title: newTitle, content: newContent };
+                localStorage.setItem("newsData", JSON.stringify(newsList));
+                loadNews();
+            }
+        }
+
+        function deleteNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
+            if (confirm("Bạn có chắc muốn xóa tin này?")) {
+                newsList.splice(index, 1);
+                localStorage.setItem("newsData", JSON.stringify(newsList));
+                loadNews();
+            }
+        }
     </script>
 </body>
 </html>

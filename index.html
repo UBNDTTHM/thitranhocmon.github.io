@@ -3,116 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Tin tức</title>
+    <title>Đăng nhập hệ thống</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
             background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .container {
-            max-width: 800px;
+        .login-container {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .login-container h2 {
+            margin-bottom: 20px;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+        .input-group {
+            margin-bottom: 15px;
             text-align: left;
         }
-        th {
-            background-color: #007bff;
-            color: white;
+        .input-group label {
+            display: block;
+            font-weight: bold;
         }
-        .btn {
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-            color: white;
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .btn-edit {
-            background-color: #ffc107;
+        .captcha {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .btn-delete {
-            background-color: #dc3545;
+        .captcha img {
+            height: 40px;
         }
-        .btn-publish {
-            background-color: #28a745;
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Quản lý Tin tức</h2>
-        <input type="text" id="newsTitle" placeholder="Tiêu đề tin">
-        <textarea id="newsContent" placeholder="Nội dung tin"></textarea>
-        <button class="btn btn-publish" onclick="saveNews()">Lưu tin</button>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>Tiêu đề</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody id="newsTable">
-                <!-- Danh sách tin tức sẽ hiển thị ở đây -->
-            </tbody>
-        </table>
+    <div class="login-container">
+        <h2>Đăng nhập hệ thống</h2>
+        <div class="input-group">
+            <label for="unitCode">Mã đơn vị</label>
+            <input type="text" id="unitCode" placeholder="Nhập mã đơn vị">
+        </div>
+        <div class="input-group">
+            <label for="username">Thông tin tài khoản</label>
+            <input type="text" id="username" placeholder="Tên đăng nhập">
+        </div>
+        <div class="input-group">
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" placeholder="Mật khẩu">
+        </div>
+        <div class="input-group captcha">
+            <img src="captcha.png" alt="Mã bảo vệ">
+            <input type="text" id="captcha" placeholder="Nhập mã bảo vệ">
+        </div>
+        <button class="btn" onclick="login()">Đăng nhập</button>
     </div>
-
     <script>
-        function saveNews() {
-            let title = document.getElementById("newsTitle").value;
-            let content = document.getElementById("newsContent").value;
-            if (title && content) {
-                let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-                newsList.push({ title, content });
-                localStorage.setItem("newsList", JSON.stringify(newsList));
-                renderNews();
-            }
+        function login() {
+            alert("Chức năng đăng nhập đang phát triển!");
         }
-
-        function renderNews() {
-            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            let newsTable = document.getElementById("newsTable");
-            newsTable.innerHTML = "";
-            newsList.forEach((news, index) => {
-                let row = `<tr>
-                    <td>${news.title}</td>
-                    <td>
-                        <button class="btn btn-publish" onclick="publishNews(${index})">Đăng</button>
-                        <button class="btn btn-delete" onclick="deleteNews(${index})">Xóa</button>
-                    </td>
-                </tr>`;
-                newsTable.innerHTML += row;
-            });
-        }
-
-        function publishNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            let news = newsList[index];
-            localStorage.setItem("publishedNews", JSON.stringify(news));
-            window.open("news.html", "_blank");
-        }
-
-        function deleteNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            newsList.splice(index, 1);
-            localStorage.setItem("newsList", JSON.stringify(newsList));
-            renderNews();
-        }
-
-        renderNews();
     </script>
 </body>
 </html>

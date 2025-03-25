@@ -4,43 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Thông Tin - Thị Trấn Hóc Môn</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
-        .header { background-color: #0044cc; color: white; text-align: center; padding: 15px; font-size: 22px; }
-        .navbar { background-color: #003399; padding: 10px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; }
-        .navbar a { color: white; padding: 10px 15px; text-decoration: none; display: block; }
+        .navbar { background-color: #003399; padding: 10px; text-align: center; display: flex; justify-content: center; }
+        .navbar a { color: white; padding: 10px 15px; text-decoration: none; }
         .content { padding: 15px; }
-        .marquee-container {
-            overflow: hidden;
-            background: #003399;
-            color: white;
-            padding: 15px 0;
-            display: flex;
-            align-items: center;
-            position: relative;
-            width: 100vw;
-            height: 60px;
-            white-space: nowrap;
-        }
-        .marquee-content {
-            font-size: 36px;
-            font-weight: bold;
-            position: absolute;
-            white-space: nowrap;
-            will-change: transform;
-        }
-        .announcement { background: white; padding: 15px; margin: 10px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; }
-        .delete-button, .edit-button { position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
-        .edit-button { right: 70px; background-color: orange; }
-        #news-form { display: none; margin: 20px 0; }
-        #news-form input, #news-form textarea { display: block; width: 100%; margin-bottom: 10px; padding: 10px; }
+        .announcement { background: white; padding: 15px; margin: 10px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .delete-button, .edit-button { background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
+        .edit-button { background-color: orange; }
     </style>
 </head>
 <body>
-    <div class="marquee-container">
-        <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
-    </div>
-
     <div class="navbar">
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>
@@ -55,7 +31,7 @@
     
     <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
     
-    <div id="news-form">
+    <div id="news-form" style="display: none;">
         <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
         <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
         <button onclick="addNews()">Đăng Tin</button>
@@ -67,28 +43,17 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            loadNews();
-            showAdminPanel();
-            startMarquee();
-        });
-
-        function startMarquee() {
-            let marquee = document.getElementById("marquee-text");
-            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
-            let textWidth = marquee.offsetWidth;
-            let position = containerWidth;
-
-            function move() {
-                position -= 2;
-                if (position < -textWidth) {
-                    position = containerWidth;
-                }
-                marquee.style.transform = `translateX(${position}px)`;
-                requestAnimationFrame(move);
-            }
-            move();
-        }
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
         function checkLogin() {
             let password = document.getElementById("admin-password").value;
@@ -118,29 +83,59 @@
             let title = document.getElementById("news-title").value;
             let content = document.getElementById("news-content").value;
             if (title && content) {
-                let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-                newsList.push({ title, content });
-                localStorage.setItem("newsData", JSON.stringify(newsList));
-                loadNews();
+                db.collection("news").add({
+                    title: title,
+                    content: content,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    loadNews();
+                });
             }
         }
 
         function loadNews() {
             let newsContainer = document.getElementById("news-container");
-            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
             newsContainer.innerHTML = "";
-            newsList.forEach((news, index) => {
-                let newsItem = document.createElement("div");
-                newsItem.classList.add("announcement");
-                newsItem.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
-                if (localStorage.getItem("isAdmin") === "true") {
-                    newsItem.innerHTML += `
-                        <button class='edit-button' onclick='editNews(${index})'>Chỉnh sửa</button>
-                        <button class='delete-button' onclick='deleteNews(${index})'>Xóa</button>`;
-                }
-                newsContainer.appendChild(newsItem);
+            db.collection("news").orderBy("timestamp", "desc").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    let newsData = doc.data();
+                    let newsItem = document.createElement("div");
+                    newsItem.classList.add("announcement");
+                    newsItem.innerHTML = `<h3>${newsData.title}</h3><p>${newsData.content}</p>`;
+                    if (localStorage.getItem("isAdmin") === "true") {
+                        newsItem.innerHTML += `<button class='edit-button' onclick='editNews("${doc.id}")'>Chỉnh sửa</button>
+                        <button class='delete-button' onclick='deleteNews("${doc.id}")'>Xóa</button>`;
+                    }
+                    newsContainer.appendChild(newsItem);
+                });
             });
         }
+
+        function editNews(newsId) {
+            let newTitle = prompt("Chỉnh sửa tiêu đề:");
+            let newContent = prompt("Chỉnh sửa nội dung:");
+            if (newTitle && newContent) {
+                db.collection("news").doc(newsId).update({
+                    title: newTitle,
+                    content: newContent
+                }).then(() => {
+                    loadNews();
+                });
+            }
+        }
+
+        function deleteNews(newsId) {
+            if (confirm("Bạn có chắc muốn xóa tin này?")) {
+                db.collection("news").doc(newsId).delete().then(() => {
+                    loadNews();
+                });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadNews();
+            showAdminPanel();
+        });
     </script>
 </body>
 </html>

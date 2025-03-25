@@ -132,31 +132,14 @@
             newsList.forEach((news, index) => {
                 let newsItem = document.createElement("div");
                 newsItem.classList.add("announcement");
-                newsItem.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>
-                    <button class='edit-button' onclick='editNews(${index})'>Chỉnh sửa</button>
-                    <button class='delete-button' onclick='deleteNews(${index})'>Xóa</button>`;
+                newsItem.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>`;
+                if (localStorage.getItem("isAdmin") === "true") {
+                    newsItem.innerHTML += `
+                        <button class='edit-button' onclick='editNews(${index})'>Chỉnh sửa</button>
+                        <button class='delete-button' onclick='deleteNews(${index})'>Xóa</button>`;
+                }
                 newsContainer.appendChild(newsItem);
             });
-        }
-
-        function editNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-            let newTitle = prompt("Chỉnh sửa tiêu đề:", newsList[index].title);
-            let newContent = prompt("Chỉnh sửa nội dung:", newsList[index].content);
-            if (newTitle && newContent) {
-                newsList[index] = { title: newTitle, content: newContent };
-                localStorage.setItem("newsData", JSON.stringify(newsList));
-                loadNews();
-            }
-        }
-
-        function deleteNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-            if (confirm("Bạn có chắc muốn xóa tin này?")) {
-                newsList.splice(index, 1);
-                localStorage.setItem("newsData", JSON.stringify(newsList));
-                loadNews();
-            }
         }
     </script>
 </body>

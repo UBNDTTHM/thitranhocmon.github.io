@@ -53,6 +53,7 @@
         .btn-add { background-color: green; }
         .btn-edit { background-color: orange; }
         .btn-delete { background-color: red; }
+        .btn-publish { background-color: blue; }
         .login-container {
             width: 300px;
             margin: 100px auto;
@@ -130,25 +131,6 @@
             }
         }
 
-        function showNewsForm(index = -1) {
-            editingIndex = index;
-            if (index >= 0) {
-                let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-                document.getElementById("newsTitle").value = newsList[index].title;
-                document.getElementById("newsSummary").value = newsList[index].summary;
-                document.getElementById("formTitle").innerText = "Chỉnh sửa tin bài";
-            } else {
-                document.getElementById("newsTitle").value = "";
-                document.getElementById("newsSummary").value = "";
-                document.getElementById("formTitle").innerText = "Thêm tin bài mới";
-            }
-            document.getElementById("newsForm").style.display = "block";
-        }
-
-        function hideNewsForm() {
-            document.getElementById("newsForm").style.display = "none";
-        }
-
         function saveNews() {
             let title = document.getElementById("newsTitle").value;
             let summary = document.getElementById("newsSummary").value;
@@ -157,12 +139,7 @@
             let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
             
             if (title && summary) {
-                if (editingIndex >= 0) {
-                    newsList[editingIndex].title = title;
-                    newsList[editingIndex].summary = summary;
-                } else {
-                    newsList.push({ title, summary, date, user });
-                }
+                newsList.push({ title, summary, date, user, published: false });
                 localStorage.setItem("newsList", JSON.stringify(newsList));
                 loadNews();
                 hideNewsForm();
@@ -185,9 +162,17 @@
                     <td>
                         <button class="btn btn-edit" onclick="showNewsForm(${index})">Sửa</button>
                         <button class="btn btn-delete" onclick="deleteNews(${index})">Xóa</button>
+                        <button class="btn btn-publish" onclick="publishNews(${index})">Đăng tin</button>
                     </td>
                 `;
             });
+        }
+
+        function publishNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+            newsList[index].published = true;
+            localStorage.setItem("newsList", JSON.stringify(newsList));
+            alert("Tin tức đã được đăng!");
         }
     </script>
 </body>

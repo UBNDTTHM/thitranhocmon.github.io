@@ -5,277 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý tin tức</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-        .header {
-            background-color: #007bff;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .container {
-            width: 90%;
-            margin: 20px auto;
-            background: white;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .table-container {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn {
-            padding: 10px 15px;
-            margin: 5px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-        .btn-add { background-color: green; }
-        .btn-edit { background-color: orange; }
-        .btn-delete { background-color: red; }
-        .btn-publish { background-color: blue; }
-        .btn:hover { opacity: 0.8; }
-        .login-container {
-            width: 350px;
-            margin: 100px auto;
-            padding: 30px;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            border-radius: 8px;
-        }
-        .login-container h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-        .login-container input {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .login-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+        body { font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: auto; }
         .hidden { display: none; }
-        .news-form {
-            display: none;
-            background: white;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            margin: 20px auto;
-            border-radius: 8px;
-        }
-        .news-form label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        .news-form input, .news-form textarea {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .news-form button {
-            padding: 10px 15px;
-            margin-right: 10px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
     </style>
 </head>
 <body>
-    <div id="login" class="login-container">
+    <div id="login">
         <h2>Đăng nhập</h2>
-        <input type="text" id="username" placeholder="Tên đăng nhập"><br><br>
-        <input type="password" id="password" placeholder="Mật khẩu"><br><br>
+        <input type="text" id="username" placeholder="Tên đăng nhập">
+        <input type="password" id="password" placeholder="Mật khẩu">
         <button onclick="login()">Đăng nhập</button>
     </div>
 
     <div id="dashboard" class="hidden">
-        <div class="header">HỆ THỐNG QUẢN TRỊ TRANG THÔNG TIN TUYÊN TRUYỀN<br>THỊ TRẤN HÓC MÔN</div>
-        <div class="container">
-            <h2>Quản lý tin tức</h2>
-            <button class="btn btn-add" onclick="showNewsForm()">Thêm tin bài mới</button>
-            <div class="table-container">
-                <table id="newsTable">
-                    <thead>
-                        <tr>
-                            <th>Chọn</th>
-                            <th>Ảnh</th>
-                            <th>Tiêu đề</th>
-                            <th>Tóm tắt</th>
-                            <th>Ngày đưa tin</th>
-                            <th>Người tạo</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <h2>Quản lý tin tức</h2>
+        <button onclick="showForm()">Thêm tin</button>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Tiêu đề</th>
+                    <th>Tóm tắt</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="newsList"></tbody>
+        </table>
     </div>
 
-    <div id="newsForm" class="news-form">
-        <h2 id="formTitle">Thêm tin bài mới</h2>
-        <label>Tiêu đề:</label>
-        <input type="text" id="newsTitle"><br><br>
-        <label>Tóm tắt:</label>
-        <textarea id="newsSummary"></textarea><br><br>
-        <button onclick="saveNews()">Lưu tin bài</button>
-        <button onclick="hideNewsForm()">Hủy</button>
+    <div id="newsForm" class="hidden">
+        <h2>Thêm/Sửa Tin</h2>
+        <input type="text" id="newsTitle" placeholder="Tiêu đề">
+        <textarea id="newsSummary" placeholder="Tóm tắt"></textarea>
+        <button onclick="saveNews()">Lưu</button>
+        <button onclick="hideForm()">Hủy</button>
     </div>
-   <input type="text" id="newsImage" placeholder="Nhập URL ảnh (tùy chọn)">
-<button onclick="saveNews()">Lưu tin</button>
 
-<script>
-    function saveNews() {
-        let title = document.getElementById("newsTitle").value;
-        let summary = document.getElementById("newsSummary").value;
-        let image = document.getElementById("newsImage").value;
-        let date = new Date().toLocaleDateString();
-
-        if (title && summary) {
-            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            newsList.push({ title, summary, image, date });
-
-            let jsonContent = JSON.stringify(newsList, null, 4);
-            let blob = new Blob([jsonContent], { type: "application/json" });
-            let a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = "news.json";
-            a.click();
-
-            alert("Hãy tải file này lên GitHub để cập nhật tin tức!");
-        }
-    }
-</script>
     <script>
-        let editingIndex = -1;
-
+        let newsData = JSON.parse(localStorage.getItem("newsData")) || [];
         function login() {
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            if (username === "admin" && password === "Hieu@1990") {
+            if (document.getElementById("username").value === "admin" && document.getElementById("password").value === "123") {
                 document.getElementById("login").classList.add("hidden");
                 document.getElementById("dashboard").classList.remove("hidden");
                 loadNews();
             } else {
-                alert("Sai tên đăng nhập hoặc mật khẩu");
+                alert("Sai thông tin đăng nhập!");
             }
         }
-
+        function showForm(index = -1) {
+            document.getElementById("newsForm").classList.remove("hidden");
+        }
+        function hideForm() {
+            document.getElementById("newsForm").classList.add("hidden");
+        }
         function saveNews() {
             let title = document.getElementById("newsTitle").value;
             let summary = document.getElementById("newsSummary").value;
-            let date = new Date().toLocaleDateString();
-            let user = "admin";
-            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-
             if (title && summary) {
-                if (editingIndex !== -1) {
-                    // Sửa tin tức hiện có
-                    newsList[editingIndex] = { title, summary, date, user, published: newsList[editingIndex].published };
-                    editingIndex = -1; // Đặt lại index
-                } else {
-                    // Thêm tin tức mới
-                    newsList.push({ title, summary, date, user, published: false });
-                }
-                localStorage.setItem("newsList", JSON.stringify(newsList));
+                newsData.push({ title, summary });
+                localStorage.setItem("newsData", JSON.stringify(newsData));
                 loadNews();
-                hideNewsForm();
+                hideForm();
             }
         }
-
         function loadNews() {
-            let tableBody = document.getElementById("newsTable").getElementsByTagName('tbody')[0];
-            tableBody.innerHTML = "";
-            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            newsList.forEach((news, index) => {
-                let newRow = tableBody.insertRow();
-                newRow.innerHTML = `
-                    <td><input type="checkbox"></td>
-                    <td><img src="default.jpg" width="50"></td>
+            let list = document.getElementById("newsList");
+            list.innerHTML = "";
+            newsData.forEach((news, index) => {
+                list.innerHTML += `<tr>
                     <td>${news.title}</td>
                     <td>${news.summary}</td>
-                    <td>${news.date}</td>
-                    <td>${news.user}</td>
-                    <td>
-                        <button class="btn btn-edit" onclick="showNewsForm(${index})">Sửa</button>
-                        <button class="btn btn-delete" onclick="deleteNews(${index})">Xóa</button>
-                        <button class="btn btn-publish" onclick="publishNews(${index})">Đăng tin</button>
-                    </td>
-                `;
+                    <td><button onclick="deleteNews(${index})">Xóa</button></td>
+                </tr>`;
             });
         }
-
-        function publishNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            newsList[index].published = true;
-            localStorage.setItem("newsList", JSON.stringify(newsList));
-            alert("Tin tức đã được đăng!");
-            window.open('reader.html', '_blank');
-        }
-
-        function showNewsForm(index) {
-            document.getElementById("newsForm").style.display = "block";
-            if (index !== undefined) {
-                editingIndex = index;
-                let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-                document.getElementById("newsTitle").value = newsList[index].title;
-                document.getElementById("newsSummary").value = newsList[index].summary;
-                document.getElementById("formTitle").textContent = "Sửa tin bài";
-            } else {
-                editingIndex = -1;
-                document.getElementById("newsTitle").value = "";
-                document.getElementById("newsSummary").value = "";
-                document.getElementById("formTitle").textContent = "Thêm tin bài mới";
-            }
-        }
-
-        function hideNewsForm() {
-            document.getElementById("newsForm").style.display = "none";
-        }
-
         function deleteNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            newsList.splice(index, 1);
-            localStorage.setItem("newsList", JSON.stringify(newsList));
+            newsData.splice(index, 1);
+            localStorage.setItem("newsData", JSON.stringify(newsData));
             loadNews();
         }
     </script>

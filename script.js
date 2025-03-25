@@ -2,7 +2,7 @@ const GITHUB_RAW_URL = "https://raw.githubusercontent.com/ubndtthm/thitranhocmon
 const GITHUB_API_URL = "https://api.github.com/repos/ubndtthm/thitranhocmon.github.io/contents/news.json";
 const TOKEN = "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"; // Thay bằng Token GitHub của bạn
 
-// 📝 Đọc nội dung từ `news.json`
+// 📝 Tải danh sách tin tức
 async function loadPublishedNews() {
     try {
         let response = await fetch(GITHUB_RAW_URL);
@@ -11,7 +11,7 @@ async function loadPublishedNews() {
         let newsListDiv = document.getElementById("news-list");
         newsListDiv.innerHTML = "";
 
-        newsList.forEach(news => {
+        newsList.forEach((news, index) => {
             let newsItem = document.createElement("div");
             newsItem.classList.add("news-item");
             newsItem.innerHTML = `
@@ -19,6 +19,8 @@ async function loadPublishedNews() {
                 <p>${news.summary}</p>
                 ${news.image ? `<img src="${news.image}" alt="Hình ảnh" style="max-width:100%;">` : ""}
                 <p class="date">Ngày đăng: ${news.date}</p>
+                <button onclick="editNews(${index})">✏️ Chỉnh sửa</button>
+                <button onclick="deleteNews(${index})">🗑️ Xóa</button>
             `;
             newsListDiv.appendChild(newsItem);
         });
@@ -28,7 +30,7 @@ async function loadPublishedNews() {
     }
 }
 
-// 📝 Lưu tin tức vào `news.json` trên GitHub
+// 📝 Lưu tin tức vào GitHub
 async function saveNews() {
     let title = document.getElementById("title").value;
     let summary = document.getElementById("summary").value;
@@ -45,9 +47,45 @@ async function saveNews() {
     };
 
     newsList.push(newNews);
+    await updateNewsFile(newsList);
+}
+
+// ✏️ Chỉnh sửa tin tức
+async function editNews(index) {
+    let response = await fetch(GITHUB_RAW_URL);
+    let newsList = await response.json();
+
+    let newTitle = prompt("Nhập tiêu đề mới:", newsList[index].title);
+    let newSummary = prompt("Nhập nội dung mới:", newsList[index].summary);
+    let newImage = prompt("Nhập đường dẫn ảnh mới:", newsList[index].image);
+
+    if (newTitle !== null && newSummary !== null) {
+        newsList[index].title = newTitle;
+        newsList[index].summary = newSummary;
+        newsList[index].image = newImage;
+        await updateNewsFile(newsList);
+        alert("Tin tức đã được cập nhật!");
+        loadPublishedNews();
+    }
+}
+
+// 🗑️ Xóa tin tức
+async function deleteNews(index) {
+    let response = await fetch(GITHUB_RAW_URL);
+    let newsList = await response.json();
+
+    if (confirm("Bạn có chắc muốn xóa tin tức này?")) {
+        newsList.splice(index, 1);
+        await updateNewsFile(newsList);
+        alert("Tin tức đã bị xóa!");
+        loadPublishedNews();
+    }
+}
+
+// 🔄 Cập nhật file `news.json` trên GitHub
+async function updateNewsFile(newsList) {
     let updatedContent = JSON.stringify(newsList, null, 4);
 
-    // 📝 Cập nhật file `news.json` trên GitHub
     let getFile = await fetch(GITHUB_API_URL, {
         headers: {
             "Authorization": `token ${TOKEN}`,
@@ -56,7 +94,7 @@ async function saveNews() {
     });
     let fileData = await getFile.json();
     
-    let update = await fetch(GITHUB_API_URL, {
+    await fetch(GITHUB_API_URL, {
         method: "PUT",
         headers: {
             "Authorization": `token ${TOKEN}`,
@@ -68,15 +106,9 @@ async function saveNews() {
             sha: fileData.sha
         })
     });
-
-    if (update.ok) {
-        alert("Tin tức đã được lưu!");
-    } else {
-        alert("Lỗi khi lưu tin tức!");
-    }
 }
 
-// 🛠 Nếu là trang hiển thị tin tức, tự động tải tin tức
+// 🛠 Tự động tải tin tức khi mở trang
 if (document.getElementById("news-list")) {
     loadPublishedNews();
 }

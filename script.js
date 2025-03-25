@@ -1,6 +1,6 @@
-const GITHUB_RAW_URL = "https://raw.githubusercontent.com/USERNAME/REPO/main/news.json";
-const GITHUB_API_URL = "https://api.github.com/repos/USERNAME/REPO/contents/news.json";
-const TOKEN = "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"; // Nhớ thay bằng Token của bạn
+const GITHUB_RAW_URL = "https://raw.githubusercontent.com/ubndtthm/thitranhocmon.github.io/main/news.json";
+const GITHUB_API_URL = "https://api.github.com/repos/ubndtthm/thitranhocmon.github.io/contents/news.json";
+const TOKEN = "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"; // Thay bằng Token GitHub của bạn
 
 // 📝 Đọc nội dung từ `news.json`
 async function loadPublishedNews() {

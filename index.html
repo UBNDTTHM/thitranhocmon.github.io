@@ -82,7 +82,15 @@
     </div>
     <script>
         function login() {
-            alert("Chức năng đăng nhập đang phát triển!");
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            
+            if (username === "admin" && password === "Hieu@1990") {
+                alert("Đăng nhập thành công!");
+                window.location.href = "admin_dashboard.html"; // Chuyển hướng sau khi đăng nhập thành công
+            } else {
+                alert("Sai tên đăng nhập hoặc mật khẩu!");
+            }
         }
     </script>
 </body>

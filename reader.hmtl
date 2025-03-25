@@ -35,6 +35,11 @@
             font-size: 0.9em;
             color: #777;
         }
+        .news-item img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -43,51 +48,31 @@
         <div id="news-list">
         </div>
     </div>
-<script>
-    async function loadPublishedNews() {
-        try {
-            let response = await fetch("https://raw.githubusercontent.com/USERNAME/REPO/main/news.json");
-            let newsList = await response.json();
 
-            let newsListDiv = document.getElementById("news-list");
-            newsListDiv.innerHTML = "";
-
-            newsList.forEach(news => {
-                let newsItem = document.createElement("div");
-                newsItem.classList.add("news-item");
-                newsItem.innerHTML = `
-                    <h2>${news.title}</h2>
-                    <p>${news.summary}</p>
-                    ${news.image ? `<img src="${news.image}" alt="Hình ảnh" style="max-width:100%; border-radius: 8px;">` : ""}
-                    <p class="date">Ngày đăng: ${news.date}</p>
-                `;
-                newsListDiv.appendChild(newsItem);
-            });
-        } catch (error) {
-            console.error("Lỗi tải tin tức:", error);
-            document.getElementById("news-list").innerHTML = "<p>Lỗi tải tin tức!</p>";
-        }
-    }
-
-    loadPublishedNews();
-</script>
     <script>
-        function loadPublishedNews() {
-            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            let publishedNews = newsList.filter(news => news.published);
-            let newsListDiv = document.getElementById("news-list");
-            newsListDiv.innerHTML = "";
+        async function loadPublishedNews() {
+            try {
+                let response = await fetch("https://raw.githubusercontent.com/UBNDTTHM/thitranhocmon.github.io/main/news.json");
+                let newsList = await response.json();
 
-            publishedNews.forEach(news => {
-                let newsItem = document.createElement("div");
-                newsItem.classList.add("news-item");
-                newsItem.innerHTML = `
-                    <h2>${news.title}</h2>
-                    <p>${news.summary}</p>
-                    <p class="date">Ngày đăng: ${news.date}</p>
-                `;
-                newsListDiv.appendChild(newsItem);
-            });
+                let newsListDiv = document.getElementById("news-list");
+                newsListDiv.innerHTML = "";
+
+                newsList.forEach(news => {
+                    let newsItem = document.createElement("div");
+                    newsItem.classList.add("news-item");
+                    newsItem.innerHTML = `
+                        <h2>${news.title}</h2>
+                        <p>${news.summary}</p>
+                        ${news.image ? `<img src="${news.image}" alt="Hình ảnh tin tức">` : ""}
+                        <p class="date">Ngày đăng: ${news.date}</p>
+                    `;
+                    newsListDiv.appendChild(newsItem);
+                });
+            } catch (error) {
+                console.error("Lỗi tải tin tức:", error);
+                document.getElementById("news-list").innerHTML = "<p>Lỗi tải tin tức. Vui lòng kiểm tra đường dẫn hoặc file news.json.</p>";
+            }
         }
 
         loadPublishedNews();

@@ -5,92 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Thông Tin - Thị Trấn Hóc Môn</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
         .header { background-color: #0044cc; color: white; text-align: center; padding: 20px; font-size: 24px; }
-        .navbar { 
-            background-color: #003399; 
-            padding: 5px;  /* Giảm padding */
-            text-align: center; 
-            display: flex; 
-            justify-content: center; 
-            gap: 10px; /* Giảm khoảng cách giữa các mục menu */
-}
-        .navbar a { 
-                color: white; 
-                padding: 8px 12px; /* Giảm padding bên trong */
-                text-decoration: none; 
-                display: block; 
-}
+        .navbar { background-color: #003399; padding: 10px; text-align: center; }
+        .navbar a { color: white; padding: 10px 20px; text-decoration: none; }
         .content { padding: 20px; }
         .announcement { background-color: white; padding: 20px; margin: 15px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; }
         .delete-button, .edit-button { position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
         .edit-button { right: 70px; background-color: orange; }
-        .marquee-container { overflow: hidden; background: #003399; color: white; padding: 15px 0; position: relative; white-space: nowrap; display: flex; align-items: center; height: 50px; }
-        .marquee-content { font-size: 24px; font-weight: bold; position: absolute; white-space: nowrap; will-change: transform; animation: marquee 10s linear infinite; }
-        @keyframes marquee {
-            from { transform: translateX(100%); }
-            to { transform: translateX(-100%); }
-        }
-         #news-form {
+        .marquee-container {    
+            overflow: hidden;
+            background: #003399;
+            color: white;
+            padding: 15px 0;
+            position: relative;
+            white-space: nowrap;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 10px; /* Tạo khoảng cách giữa các phần tử */
-    }
-        #news-form input, 
-        #news-form textarea { 
-            width: 100%; /* Chiều rộng đầy đủ */
-            max-width: 600px; /* Giới hạn tối đa */
-            padding: 10px; /* Tạo khoảng cách bên trong */
-            margin-bottom: 10px; /* Tạo khoảng cách giữa các ô */
-            border: 1px solid #ccc; /* Viền nhẹ */
-            border-radius: 5px; /* Bo tròn góc */
-            font-size: 16px; /* Cỡ chữ dễ nhìn */
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
-}
-    #news-form textarea {
-        height: 150px; /* Định chiều cao cố định cho ô nhập nội dung */
-        resize: vertical; /* Cho phép kéo giãn theo chiều dọc */
-}
-   @media (max-width: 768px) {
-        .content {
-            padding: 10px;
-            font-size: 16px;
+            height: 50px;
         }
-        .announcement {
-            font-size: 16px;
-            padding: 15px;
-            width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
+        .marquee-content {
+            font-size: 36px;
+            font-weight: bold;
+            position: absolute;
+            white-space: nowrap;
+            will-change: transform;
         }
-        .marquee-container {
-            white-space: normal;
-            text-align: center;
-            font-size: 18px;
-        }
-        .navbar {
-            flex-direction: column;
-            gap: 5px;
-        }
-        .navbar a {
-            padding: 10px;
-            text-align: center;
-            width: 100%;
-        }
-    }
     </style>
 </head>
 <body>
     <div class="marquee-container">
-        <div class="marquee-content">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
+        <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
     </div>
 
     <div class="navbar">
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>
         <a href="#">Thông Báo</a>
-        <a href="#">Liên Hệ: 0967008890 - Admin: Hiếu</a>
+        <a href="#">Liên Hệ:0967008890 - Admin: Hiếu</a>
     </div>
 
     <div id="login-section">
@@ -111,8 +63,29 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "Hieu@1990";
-
+        function startMarquee() {
+            let marquee = document.getElementById("marquee-text");
+            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
+            let textWidth = marquee.offsetWidth;
+            let position = containerWidth;
+            
+            function move() {
+                position -= 2; 
+                if (position < -textWidth) {
+                    position = containerWidth;
+                }
+                marquee.style.transform = `translateX(${position}px)`;
+                requestAnimationFrame(move);
+            }
+            
+            move();
+        }
+        
+        document.addEventListener("DOMContentLoaded", startMarquee);
+    </script>
+    <script>
+        const ADMIN_PASSWORD = "Hieu@1990"; 
+        
         function checkLogin() {
             let password = document.getElementById("admin-password").value;
             if (password === ADMIN_PASSWORD) {
@@ -138,51 +111,35 @@
             });
         }
 
-        function addNews() {
-            let title = document.getElementById("news-title").value;
-            let content = document.getElementById("news-content").value;
-            if (!title || !content) return alert("Vui lòng nhập đầy đủ thông tin!");
-
-            let newsList = JSON.parse(localStorage.getItem("news")) || [];
-            newsList.push({ title, content });
-            localStorage.setItem("news", JSON.stringify(newsList));
-            displayNews();
-        }
-
-        function displayNews() {
+        function loadNews() {
             let newsContainer = document.getElementById("news-container");
-            let newsList = JSON.parse(localStorage.getItem("news")) || [];
-            newsContainer.innerHTML = newsList.map((news, index) => `
-                <div class='announcement'>
-                    <h3>${news.title}</h3>
-                    <p>${news.content}</p>
-                    <button class='edit-button' onclick='editNews(${index})'>Sửa</button>
-                    <button class='delete-button' onclick='deleteNews(${index})'>Xóa</button>
-                </div>
-            `).join('');
-            showAdminPanel();
-        }
+            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
 
-        function editNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("news"));
-            let newTitle = prompt("Sửa tiêu đề:", newsList[index].title);
-            let newContent = prompt("Sửa nội dung:", newsList[index].content);
-            if (newTitle && newContent) {
-                newsList[index] = { title: newTitle, content: newContent };
-                localStorage.setItem("news", JSON.stringify(newsList));
-                displayNews();
-            }
-        }
-
-        function deleteNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("news"));
-            newsList.splice(index, 1);
-            localStorage.setItem("news", JSON.stringify(newsList));
-            displayNews();
+            newsContainer.innerHTML = "";
+            newsList.forEach((news, index) => {
+                let newAnnouncement = document.createElement("div");
+                newAnnouncement.classList.add("announcement");
+                newAnnouncement.innerHTML = `<h3 onclick="toggleNews(${index})" style="cursor:pointer; color:blue;">${news.title}</h3>
+                                            <p id="news-content-${index}" style="display:none;">${news.content}</p>`;
+                
+                let deleteButton = document.createElement("button");
+                deleteButton.textContent = "Xóa";
+                deleteButton.classList.add("delete-button");
+                deleteButton.onclick = function() { deleteNews(index); };
+                newAnnouncement.appendChild(deleteButton);
+                
+                let editButton = document.createElement("button");
+                editButton.textContent = "Chỉnh sửa";
+                editButton.classList.add("edit-button");
+                editButton.onclick = function() { editNews(index); };
+                newAnnouncement.appendChild(editButton);
+                
+                newsContainer.prepend(newAnnouncement);
+            });
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            displayNews();
+            loadNews();
             showAdminPanel();
         });
     </script>

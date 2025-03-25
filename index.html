@@ -27,26 +27,51 @@
         </div>
     </div>
 
+    <div class="navbar">
+        <a href="#">Giới Thiệu</a>
+        <a href="#">Tin Tức</a>
+        <a href="#">Thông Báo</a>
+        <a href="#">Liên Hệ</a>
+    </div>
+
+    <div id="login-section">
+        <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
+        <button onclick="checkLogin()">Đăng nhập</button>
+    </div>
+    
+    <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
+    
+    <div id="news-form" style="display: none;">
+        <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
+        <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
+        <button onclick="addNews()">Đăng Tin</button>
+    </div>
+
+    <div class="content">
+        <h2>Danh Sách Tin Tức</h2>
+        <div id="news-container"></div>
+    </div>
+
     <!-- Firebase SDK (Đúng cách) -->
-   <script type="module">
-  // Import Firebase từ CDN
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+    <script type="module">
+        // Import Firebase từ CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
 
-  // Cấu hình Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
-    authDomain: "hocmonnews-c3abc.firebaseapp.com",
-    projectId: "hocmonnews-c3abc",
-    storageBucket: "hocmonnews-c3abc.firebasestorage.app",
-    messagingSenderId: "359391584763",
-    appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
-  };
+        // Cấu hình Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
+            authDomain: "hocmonnews-c3abc.firebaseapp.com",
+            projectId: "hocmonnews-c3abc",
+            storageBucket: "hocmonnews-c3abc.appspot.com",
+            messagingSenderId: "359391584763",
+            appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
+        };
 
-  // Khởi tạo Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  console.log("✅ Firebase đã khởi tạo thành công!");
+        // Khởi tạo Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        console.log("✅ Firebase đã khởi tạo thành công!");
     </script>
 </body>
     <div class="navbar">

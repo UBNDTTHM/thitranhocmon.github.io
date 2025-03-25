@@ -52,7 +52,22 @@
             messagingSenderId: "359391584763",
             appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
         };
-        
+        const newsData = {
+            title: document.getElementById("title").value,
+            content: document.getElementById("content").value,
+            timestamp: new Date().toISOString()
+        };
+
+    // Log dữ liệu trước khi gửi
+    console.log("Dữ liệu sẽ lưu:", newsData);
+
+    firebase.database().ref("news").push(newsData)
+    .then(() => {
+        console.log("Lưu tin tức thành công!");
+    })
+    .catch((error) => {
+        console.error("Lỗi khi lưu:", error);
+    });
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const newsRef = ref(db, 'news');

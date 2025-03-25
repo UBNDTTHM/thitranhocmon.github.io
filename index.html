@@ -5,45 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Thông Tin - Thị Trấn Hóc Môn</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        
         .header { background-color: #0044cc; color: white; text-align: center; padding: 20px; font-size: 24px; }
-        .navbar { background-color: #003399; padding: 10px; text-align: center; }
-        .navbar a { color: white; padding: 10px 20px; text-decoration: none; }
+        
+        .navbar {
+            background-color: #003399;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar a { color: white; padding: 10px 20px; text-decoration: none; display: inline-block; }
+        
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .nav-links { display: flex; }
+        .nav-links a:hover { background-color: #002266; }
+
         .content { padding: 20px; }
-        .announcement { background-color: white; padding: 20px; margin: 15px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; }
-        .delete-button, .edit-button { position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
+        
+        .announcement {
+            background-color: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #cc0000;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .delete-button, .edit-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            display: none;
+        }
         .edit-button { right: 70px; background-color: orange; }
         
-        .marquee-container {    
+        #login-section {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px;
+        }
+        
+        .marquee-container {
             overflow: hidden;
             background: #003399;
             color: white;
             padding: 15px 0;
-            position: relative;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            height: 50px;
+            text-align: center;
         }
-        .marquee-content {
-            font-size: 36px;
-            font-weight: bold;
-            position: absolute;
-            white-space: nowrap;
-            will-change: transform;
-        }
-
-        /* Căn phần đăng nhập sang phải */
-        #login-section {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px;
-            margin-right: 20px;
-        }
-        #login-section input {
-            margin-right: 10px;
-            padding: 5px;
+        
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: #003399;
+                position: absolute;
+                top: 50px;
+                left: 0;
+            }
+            .nav-links a {
+                padding: 15px;
+                text-align: center;
+                display: block;
+            }
+            .nav-links.show { display: flex; }
         }
     </style>
 </head>
@@ -53,110 +98,30 @@
     </div>
 
     <div class="navbar">
-        <a href="#">Giới Thiệu</a>
-        <a href="#">Tin Tức</a>
-        <a href="#">Thông Báo</a>
-        <a href="#">Liên Hệ: 0967008890 - Admin: Hiếu</a>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <div class="nav-links">
+            <a href="#">Giới Thiệu</a>
+            <a href="#">Tin Tức</a>
+            <a href="#">Thông Báo</a>
+            <a href="#">Liên Hệ: 0967008890</a>
+        </div>
     </div>
 
-    <!-- Khu vực đăng nhập nằm bên phải -->
     <div id="login-section">
         <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
         <button onclick="checkLogin()">Đăng nhập</button>
     </div>
-    
     <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
-
-    <div id="news-form" style="display: none;">
-        <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
-        <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
-        <button onclick="addNews()">Đăng Tin</button>
-    </div>
-
+    
     <div class="content">
         <h2>Danh Sách Tin Tức</h2>
         <div id="news-container"></div>
     </div>
-
+    
     <script>
-        function startMarquee() {
-            let marquee = document.getElementById("marquee-text");
-            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
-            let textWidth = marquee.offsetWidth;
-            let position = containerWidth;
-            
-            function move() {
-                position -= 2; 
-                if (position < -textWidth) {
-                    position = containerWidth;
-                }
-                marquee.style.transform = `translateX(${position}px)`;
-                requestAnimationFrame(move);
-            }
-            
-            move();
+        function toggleMenu() {
+            document.querySelector(".nav-links").classList.toggle("show");
         }
-        
-        document.addEventListener("DOMContentLoaded", startMarquee);
-
-        const ADMIN_PASSWORD = "Hieu@1990"; 
-        
-        function checkLogin() {
-            let password = document.getElementById("admin-password").value;
-            if (password === ADMIN_PASSWORD) {
-                localStorage.setItem("isAdmin", "true");
-                showAdminPanel();
-            } else {
-                alert("Sai mật khẩu!");
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem("isAdmin");
-            location.reload();
-        }
-
-        function showAdminPanel() {
-            let isAdmin = localStorage.getItem("isAdmin") === "true";
-            document.getElementById("login-section").style.display = isAdmin ? "none" : "flex";
-            document.getElementById("news-form").style.display = isAdmin ? "block" : "none";
-            document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
-            document.querySelectorAll(".delete-button, .edit-button").forEach(button => {
-                button.style.display = isAdmin ? "block" : "none";
-            });
-        }
-
-        function loadNews() {
-            let newsContainer = document.getElementById("news-container");
-            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-
-            newsContainer.innerHTML = "";
-            newsList.forEach((news, index) => {
-                let newAnnouncement = document.createElement("div");
-                newAnnouncement.classList.add("announcement");
-                newAnnouncement.innerHTML = `<h3 onclick="toggleNews(${index})" style="cursor:pointer; color:blue;">${news.title}</h3>
-                                            <p id="news-content-${index}" style="display:none;">${news.content}</p>`;
-                
-                let deleteButton = document.createElement("button");
-                deleteButton.textContent = "Xóa";
-                deleteButton.classList.add("delete-button");
-                deleteButton.onclick = function() { deleteNews(index); };
-                newAnnouncement.appendChild(deleteButton);
-                
-                let editButton = document.createElement("button");
-                editButton.textContent = "Chỉnh sửa";
-                editButton.classList.add("edit-button");
-                editButton.onclick = function() { editNews(index); };
-                newAnnouncement.appendChild(editButton);
-                
-                newsContainer.prepend(newAnnouncement);
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            loadNews();
-            showAdminPanel();
-        });
     </script>
 </body>
 </html>

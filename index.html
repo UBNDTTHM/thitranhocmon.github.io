@@ -28,23 +28,25 @@
     </div>
 
     <!-- Firebase SDK (Đúng cách) -->
-    <script type="module">
-        // Import Firebase SDK
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+   <script type="module">
+  // Import Firebase từ CDN
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
 
-        // Cấu hình Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
-            authDomain: "hocmonnews-c3abc.firebaseapp.com",
-            projectId: "hocmonnews-c3abc",
-            storageBucket: "hocmonnews-c3abc.appspot.com",
-            messagingSenderId: "359391584763",
-            appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
-        };
+  // Cấu hình Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
+    authDomain: "hocmonnews-c3abc.firebaseapp.com",
+    projectId: "hocmonnews-c3abc",
+    storageBucket: "hocmonnews-c3abc.firebasestorage.app",
+    messagingSenderId: "359391584763",
+    appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
+  };
 
-        // Khởi tạo Firebase
-        const app = initializeApp(firebaseConfig);
-        console.log("Firebase đã khởi tạo thành công!", app);
+  // Khởi tạo Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  console.log("✅ Firebase đã khởi tạo thành công!");
     </script>
 </body>
     <div class="navbar">

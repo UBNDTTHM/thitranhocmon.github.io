@@ -73,12 +73,12 @@
     </div>
     
     <div id="dashboard" class="hidden">
-        <div class="header">HỆ THỐNG QUẢN TRỊ TRANG THÔNG TIN ĐIỆN TỬ<br>THỊ TRẤN HÓC MÔN</div>
+        <div class="header">HỆ THỐNG QUẢN TRỊ TRANG THÔNG TIN TUYÊN TRUYỀN<br>THỊ TRẤN HÓC MÔN</div>
         <div class="container">
             <h2>Quản lý tin tức</h2>
-            <button class="btn btn-add">Thêm tin bài mới</button>
+            <button class="btn btn-add" onclick="addNews()">Thêm tin bài mới</button>
             <div class="table-container">
-                <table>
+                <table id="newsTable">
                     <thead>
                         <tr>
                             <th>Chọn</th>
@@ -91,30 +91,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td><img src="example1.jpg" width="50"></td>
-                            <td>Số điện thoại Công an 12 xã - thị trấn</td>
-                            <td>Số điện thoại tiếp nhận thông tin về an ninh trật tự</td>
-                            <td>24/3/2025</td>
-                            <td>admin</td>
-                            <td>
-                                <button class="btn btn-edit">Sửa</button>
-                                <button class="btn btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td><img src="example2.jpg" width="50"></td>
-                            <td>35 thủ tục hành chính</td>
-                            <td>35 thủ tục hành chính, dịch vụ công trực tuyến</td>
-                            <td>13/3/2025</td>
-                            <td>admin</td>
-                            <td>
-                                <button class="btn btn-edit">Sửa</button>
-                                <button class="btn btn-delete">Xóa</button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -130,6 +106,48 @@
                 document.getElementById("dashboard").classList.remove("hidden");
             } else {
                 alert("Sai tên đăng nhập hoặc mật khẩu");
+            }
+        }
+
+        function addNews() {
+            var title = prompt("Nhập tiêu đề tin bài:");
+            var summary = prompt("Nhập tóm tắt tin bài:");
+            var date = new Date().toLocaleDateString();
+            var user = "admin";
+            
+            if (title && summary) {
+                var table = document.getElementById("newsTable").getElementsByTagName('tbody')[0];
+                var newRow = table.insertRow();
+                newRow.innerHTML = `
+                    <td><input type="checkbox"></td>
+                    <td><img src="default.jpg" width="50"></td>
+                    <td>${title}</td>
+                    <td>${summary}</td>
+                    <td>${date}</td>
+                    <td>${user}</td>
+                    <td>
+                        <button class="btn btn-edit" onclick="editNews(this)">Sửa</button>
+                        <button class="btn btn-delete" onclick="deleteNews(this)">Xóa</button>
+                    </td>
+                `;
+            }
+        }
+
+        function editNews(button) {
+            var row = button.parentElement.parentElement;
+            var title = prompt("Chỉnh sửa tiêu đề:", row.cells[2].innerText);
+            var summary = prompt("Chỉnh sửa tóm tắt:", row.cells[3].innerText);
+            
+            if (title && summary) {
+                row.cells[2].innerText = title;
+                row.cells[3].innerText = summary;
+            }
+        }
+
+        function deleteNews(button) {
+            if (confirm("Bạn có chắc muốn xóa tin này không?")) {
+                var row = button.parentElement.parentElement;
+                row.parentElement.removeChild(row);
             }
         }
     </script>

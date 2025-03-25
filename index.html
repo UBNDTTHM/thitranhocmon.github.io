@@ -62,6 +62,14 @@
             text-align: center;
         }
         .hidden { display: none; }
+        .news-form {
+            display: none;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin: 20px auto;
+        }
     </style>
 </head>
 <body>
@@ -76,7 +84,7 @@
         <div class="header">HỆ THỐNG QUẢN TRỊ TRANG THÔNG TIN TUYÊN TRUYỀN<br>THỊ TRẤN HÓC MÔN</div>
         <div class="container">
             <h2>Quản lý tin tức</h2>
-            <button class="btn btn-add" onclick="addNews()">Thêm tin bài mới</button>
+            <button class="btn btn-add" onclick="showNewsForm()">Thêm tin bài mới</button>
             <div class="table-container">
                 <table id="newsTable">
                     <thead>
@@ -97,6 +105,18 @@
         </div>
     </div>
     
+    <div id="newsForm" class="news-form">
+        <h2>Thêm tin bài mới</h2>
+        <label>Tiêu đề:</label>
+        <input type="text" id="newsTitle"><br><br>
+        <label>Tóm tắt:</label>
+        <textarea id="newsSummary"></textarea><br><br>
+        <label>Hình ảnh đại diện:</label>
+        <input type="file" id="newsImage"><br><br>
+        <button onclick="saveNews()">Lưu tin bài</button>
+        <button onclick="hideNewsForm()">Hủy</button>
+    </div>
+    
     <script>
         function login() {
             var username = document.getElementById("username").value;
@@ -109,9 +129,17 @@
             }
         }
 
-        function addNews() {
-            var title = prompt("Nhập tiêu đề tin bài:");
-            var summary = prompt("Nhập tóm tắt tin bài:");
+        function showNewsForm() {
+            document.getElementById("newsForm").style.display = "block";
+        }
+
+        function hideNewsForm() {
+            document.getElementById("newsForm").style.display = "none";
+        }
+
+        function saveNews() {
+            var title = document.getElementById("newsTitle").value;
+            var summary = document.getElementById("newsSummary").value;
             var date = new Date().toLocaleDateString();
             var user = "admin";
             
@@ -130,6 +158,7 @@
                         <button class="btn btn-delete" onclick="deleteNews(this)">Xóa</button>
                     </td>
                 `;
+                hideNewsForm();
             }
         }
 

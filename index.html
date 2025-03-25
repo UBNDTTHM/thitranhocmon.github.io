@@ -1,153 +1,393 @@
 <!DOCTYPE html>
+
 <html lang="vi">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Thông Tin - Thị Trấn Hóc Môn</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
-        .navbar { background-color: #003399; padding: 10px; text-align: center; display: flex; justify-content: center; }
-        .navbar a { color: white; padding: 10px 15px; text-decoration: none; }
-        .content { padding: 15px; }
-        .announcement { background: white; padding: 15px; margin: 10px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
-        .delete-button, .edit-button { background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
-        .edit-button { background-color: orange; }
-    </style>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trang Thông Tin - Thị Trấn Hóc Môn</title>
+
+    <style>
+
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+
+        .navbar { background-color: #003399; padding: 10px; text-align: center; display: flex; justify-content: center; }
+
+        .navbar a { color: white; padding: 10px 15px; text-decoration: none; }
+
+        .content { padding: 15px; }
+
+        .announcement { background: white; padding: 15px; margin: 10px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+
+        .delete-button, .edit-button { background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
+
+        .edit-button { background-color: orange; }
+
+    </style>
+
 </head>
+
 <body>
-    <div class="navbar">
-        <a href="#">Trang chủ</a>
-        <a href="#">Tin tức</a>
-        <a href="#">Liên hệ</a>
-        <a href="#">Giới Thiệu</a>
-        <a href="#">Thông Báo</a>
-    </div>
-    <div class="content">
-        <h1>Chào mừng đến với Trang Thông Tin Thị Trấn Hóc Môn</h1>
-        <div class="announcement">
-            <p>Thông báo quan trọng sẽ hiển thị tại đây.</p>
-        </div>
-    </div>
 
-    <div id="login-section">
-        <input type="password" id="admin-password-input" placeholder="Nhập mật khẩu quản trị">
-        <button onclick="checkLogin()">Đăng nhập</button>
-    </div>
+    <div class="navbar">
 
-    <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
+        <a href="#">Trang chủ</a>
 
-    <div id="news-form" style="display: none;">
-        <input type="text" id="news-title-input" placeholder="Nhập tiêu đề tin tức">
-        <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
-        <button onclick="addNews()">Đăng Tin</button>
-    </div>
+        <a href="#">Tin tức</a>
 
-    <div class="content">
-        <h2>Danh Sách Tin Tức</h2>
-        <div id="news-container"></div>
-    </div>
+        <a href="#">Liên hệ</a>
 
-    <script type="module">
-        // Import Firebase từ CDN
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+    </div>
 
-        // Cấu hình Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
-            authDomain: "hocmonnews-c3abc.firebaseapp.com",
-            projectId: "hocmonnews-c3abc",
-            storageBucket: "hocmonnews-c3abc.appspot.com",
-            messagingSenderId: "359391584763",
-            appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
-        };
+    <div class="content">
 
-        // Khởi tạo Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        console.log("✅ Firebase đã khởi tạo thành công!");
+        <h1>Chào mừng đến với Trang Thông Tin Thị Trấn Hóc Môn</h1>
 
-        function checkLogin() {
-            let password = document.getElementById("admin-password-input").value;
-            if (password === "Hieu@1990") {
-                localStorage.setItem("isAdmin", "true");
-                showAdminPanel();
-            } else {
-                alert("Sai mật khẩu!");
-            }
-        }
+        <div class="announcement">
 
-        function logout() {
-            localStorage.removeItem("isAdmin");
-            location.reload();
-        }
+            <p>Thông báo quan trọng sẽ hiển thị tại đây.</p>
 
-        function showAdminPanel() {
-            let isAdmin = localStorage.getItem("isAdmin") === "true";
-            document.getElementById("news-form").style.display = isAdmin ? "block" : "none";
-            document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
-            document.querySelectorAll(".delete-button, .edit-button").forEach(button => {
-                button.style.display = isAdmin ? "block" : "none";
-            });
-        }
+        </div>
 
-        function addNews() {
-            let title = document.getElementById("news-title-input").value;
-            let content = document.getElementById("news-content").value;
-            if (title && content) {
-                addDoc(collection(db, "news"), {
-                    title: title,
-                    content: content,
-                    timestamp: serverTimestamp()
-                }).then(() => {
-                    loadNews();
-                });
-            }
-        }
+    </div>
 
-        function loadNews() {
-            let newsContainer = document.getElementById("news-container");
-            newsContainer.innerHTML = "";
-            getDocs(query(collection(db, "news"), orderBy("timestamp", "desc"))).then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    let newsData = doc.data();
-                    let newsItem = document.createElement("div");
-                    newsItem.classList.add("announcement");
-                    newsItem.innerHTML = `<h3>${newsData.title}</h3><p>${newsData.content}</p>`;
-                    if (localStorage.getItem("isAdmin") === "true") {
-                        newsItem.innerHTML += `<button class='edit-button' onclick='editNews("${doc.id}")'>Chỉnh sửa</button>
-                        <button class='delete-button' onclick='deleteNews("${doc.id}")'>Xóa</button>`;
-                    }
-                    newsContainer.appendChild(newsItem);
-                });
-            });
-        }
 
-        function editNews(newsId) {
-            let newTitle = prompt("Chỉnh sửa tiêu đề:");
-            let newContent = prompt("Chỉnh sửa nội dung:");
-            if (newTitle && newContent) {
-                updateDoc(doc(db, "news", newsId), {
-                    title: newTitle,
-                    content: newContent
-                }).then(() => {
-                    loadNews();
-                });
-            }
-        }
 
-        function deleteNews(newsId) {
-            if (confirm("Bạn có chắc muốn xóa tin này?")) {
-                deleteDoc(doc(db, "news", newsId)).then(() => {
-                    loadNews();
-                });
-            }
-        }
+    <div class="navbar">
 
-        document.addEventListener("DOMContentLoaded", () => {
-            loadNews();
-            showAdminPanel();
-        });
-    </script>
+        <a href="#">Giới Thiệu</a>
+
+        <a href="#">Tin Tức</a>
+
+        <a href="#">Thông Báo</a>
+
+        <a href="#">Liên Hệ</a>
+
+    </div>
+
+
+
+    <div id="login-section">
+
+        <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
+
+        <button onclick="checkLogin()">Đăng nhập</button>
+
+    </div>
+
+    
+
+    <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
+
+    
+
+    <div id="news-form" style="display: none;">
+
+        <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
+
+        <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
+
+        <button onclick="addNews()">Đăng Tin</button>
+
+    </div>
+
+
+
+    <div class="content">
+
+        <h2>Danh Sách Tin Tức</h2>
+
+        <div id="news-container"></div>
+
+    </div>
+
+
+
+    <!-- Firebase SDK (Đúng cách) -->
+
+    <script type="module">
+
+        // Import Firebase từ CDN
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+
+
+
+        // Cấu hình Firebase
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
+
+            authDomain: "hocmonnews-c3abc.firebaseapp.com",
+
+            projectId: "hocmonnews-c3abc",
+
+            storageBucket: "hocmonnews-c3abc.appspot.com",
+
+            messagingSenderId: "359391584763",
+
+            appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
+
+        };
+
+
+
+        // Khởi tạo Firebase
+
+        const app = initializeApp(firebaseConfig);
+
+        const db = getFirestore(app);
+
+        console.log("✅ Firebase đã khởi tạo thành công!");
+
+    </script>
+
 </body>
+
+    <div class="navbar">
+
+        <a href="#">Giới Thiệu</a>
+
+        <a href="#">Tin Tức</a>
+
+        <a href="#">Thông Báo</a>
+
+        <a href="#">Liên Hệ</a>
+
+    </div>
+
+
+
+    <div id="login-section">
+
+        <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
+
+        <button onclick="checkLogin()">Đăng nhập</button>
+
+    </div>
+
+    
+
+    <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
+
+    
+
+    <div id="news-form" style="display: none;">
+
+        <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
+
+        <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
+
+        <button onclick="addNews()">Đăng Tin</button>
+
+    </div>
+
+
+
+    <div class="content">
+
+        <h2>Danh Sách Tin Tức</h2>
+
+        <div id="news-container"></div>
+
+    </div>
+
+
+
+    <script>
+
+     const firebaseConfig = {
+
+    apiKey: "",  // Web API Key chưa có, cần tạo
+
+    authDomain: "hocmonnews-c3abc.firebaseapp.com",
+
+    projectId: "hocmonnews-c3abc",
+
+    storageBucket: "hocmonnews-c3abc.appspot.com",
+
+    messagingSenderId: "359391584763",
+
+    appId: ""  // Cần tạo ứng dụng để lấy App ID
+
+    };
+
+        
+
+        firebase.initializeApp(firebaseConfig);
+
+        const db = firebase.firestore();
+
+
+
+        function checkLogin() {
+
+            let password = document.getElementById("admin-password").value;
+
+            if (password === "Hieu@1990") {
+
+                localStorage.setItem("isAdmin", "true");
+
+                showAdminPanel();
+
+            } else {
+
+                alert("Sai mật khẩu!");
+
+            }
+
+        }
+
+
+
+        function logout() {
+
+            localStorage.removeItem("isAdmin");
+
+            location.reload();
+
+        }
+
+
+
+        function showAdminPanel() {
+
+            let isAdmin = localStorage.getItem("isAdmin") === "true";
+
+            document.getElementById("news-form").style.display = isAdmin ? "block" : "none";
+
+            document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
+
+            document.querySelectorAll(".delete-button, .edit-button").forEach(button => {
+
+                button.style.display = isAdmin ? "block" : "none";
+
+            });
+
+        }
+
+
+
+        function addNews() {
+
+            let title = document.getElementById("news-title").value;
+
+            let content = document.getElementById("news-content").value;
+
+            if (title && content) {
+
+                db.collection("news").add({
+
+                    title: title,
+
+                    content: content,
+
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+
+                }).then(() => {
+
+                    loadNews();
+
+                });
+
+            }
+
+        }
+
+
+
+        function loadNews() {
+
+            let newsContainer = document.getElementById("news-container");
+
+            newsContainer.innerHTML = "";
+
+            db.collection("news").orderBy("timestamp", "desc").get().then((querySnapshot) => {
+
+                querySnapshot.forEach((doc) => {
+
+                    let newsData = doc.data();
+
+                    let newsItem = document.createElement("div");
+
+                    newsItem.classList.add("announcement");
+
+                    newsItem.innerHTML = `<h3>${newsData.title}</h3><p>${newsData.content}</p>`;
+
+                    if (localStorage.getItem("isAdmin") === "true") {
+
+                        newsItem.innerHTML += `<button class='edit-button' onclick='editNews("${doc.id}")'>Chỉnh sửa</button>
+
+                        <button class='delete-button' onclick='deleteNews("${doc.id}")'>Xóa</button>`;
+
+                    }
+
+                    newsContainer.appendChild(newsItem);
+
+                });
+
+            });
+
+        }
+
+
+
+        function editNews(newsId) {
+
+            let newTitle = prompt("Chỉnh sửa tiêu đề:");
+
+            let newContent = prompt("Chỉnh sửa nội dung:");
+
+            if (newTitle && newContent) {
+
+                db.collection("news").doc(newsId).update({
+
+                    title: newTitle,
+
+                    content: newContent
+
+                }).then(() => {
+
+                    loadNews();
+
+                });
+
+            }
+
+        }
+
+
+
+        function deleteNews(newsId) {
+
+            if (confirm("Bạn có chắc muốn xóa tin này?")) {
+
+                db.collection("news").doc(newsId).delete().then(() => {
+
+                    loadNews();
+
+                });
+
+            }
+
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            loadNews();
+
+            showAdminPanel();
+
+        });
+
+    </script>
+
+</body>
+
 </html>

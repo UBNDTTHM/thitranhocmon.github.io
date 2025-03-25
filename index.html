@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Thông Tin - Thị Trấn Hóc Môn</title>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
         .navbar { background-color: #003399; padding: 10px; text-align: center; display: flex; justify-content: center; }
@@ -16,26 +14,39 @@
         .edit-button { background-color: orange; }
     </style>
 </head>
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
-    authDomain: "hocmonnews-c3abc.firebaseapp.com",
-    projectId: "hocmonnews-c3abc",
-    storageBucket: "hocmonnews-c3abc.firebasestorage.app",
-    messagingSenderId: "359391584763",
-    appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
 <body>
+    <div class="navbar">
+        <a href="#">Trang chủ</a>
+        <a href="#">Tin tức</a>
+        <a href="#">Liên hệ</a>
+    </div>
+    <div class="content">
+        <h1>Chào mừng đến với Trang Thông Tin Thị Trấn Hóc Môn</h1>
+        <div class="announcement">
+            <p>Thông báo quan trọng sẽ hiển thị tại đây.</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (Đúng cách) -->
+    <script type="module">
+        // Import Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+
+        // Cấu hình Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
+            authDomain: "hocmonnews-c3abc.firebaseapp.com",
+            projectId: "hocmonnews-c3abc",
+            storageBucket: "hocmonnews-c3abc.appspot.com",
+            messagingSenderId: "359391584763",
+            appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
+        };
+
+        // Khởi tạo Firebase
+        const app = initializeApp(firebaseConfig);
+        console.log("Firebase đã khởi tạo thành công!", app);
+    </script>
+</body>
     <div class="navbar">
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>

@@ -106,7 +106,7 @@
     </div>
     
     <div id="newsForm" class="news-form">
-        <h2>Thêm tin bài mới</h2>
+        <h2 id="formTitle">Thêm tin bài mới</h2>
         <label>Tiêu đề:</label>
         <input type="text" id="newsTitle"><br><br>
         <label>Tóm tắt:</label>
@@ -116,6 +116,8 @@
     </div>
     
     <script>
+        let editingIndex = -1;
+
         function login() {
             var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;
@@ -128,7 +130,18 @@
             }
         }
 
-        function showNewsForm() {
+        function showNewsForm(index = -1) {
+            editingIndex = index;
+            if (index >= 0) {
+                let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+                document.getElementById("newsTitle").value = newsList[index].title;
+                document.getElementById("newsSummary").value = newsList[index].summary;
+                document.getElementById("formTitle").innerText = "Chỉnh sửa tin bài";
+            } else {
+                document.getElementById("newsTitle").value = "";
+                document.getElementById("newsSummary").value = "";
+                document.getElementById("formTitle").innerText = "Thêm tin bài mới";
+            }
             document.getElementById("newsForm").style.display = "block";
         }
 
@@ -137,14 +150,19 @@
         }
 
         function saveNews() {
-            var title = document.getElementById("newsTitle").value;
-            var summary = document.getElementById("newsSummary").value;
-            var date = new Date().toLocaleDateString();
-            var user = "admin";
+            let title = document.getElementById("newsTitle").value;
+            let summary = document.getElementById("newsSummary").value;
+            let date = new Date().toLocaleDateString();
+            let user = "admin";
+            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
             
             if (title && summary) {
-                var newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-                newsList.push({ title, summary, date, user });
+                if (editingIndex >= 0) {
+                    newsList[editingIndex].title = title;
+                    newsList[editingIndex].summary = summary;
+                } else {
+                    newsList.push({ title, summary, date, user });
+                }
                 localStorage.setItem("newsList", JSON.stringify(newsList));
                 loadNews();
                 hideNewsForm();
@@ -152,11 +170,11 @@
         }
 
         function loadNews() {
-            var tableBody = document.getElementById("newsTable").getElementsByTagName('tbody')[0];
+            let tableBody = document.getElementById("newsTable").getElementsByTagName('tbody')[0];
             tableBody.innerHTML = "";
-            var newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            newsList.forEach(news => {
-                var newRow = tableBody.insertRow();
+            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+            newsList.forEach((news, index) => {
+                let newRow = tableBody.insertRow();
                 newRow.innerHTML = `
                     <td><input type="checkbox"></td>
                     <td><img src="default.jpg" width="50"></td>
@@ -165,17 +183,11 @@
                     <td>${news.date}</td>
                     <td>${news.user}</td>
                     <td>
-                        <button class="btn btn-delete" onclick="deleteNews('${news.title}')">Xóa</button>
+                        <button class="btn btn-edit" onclick="showNewsForm(${index})">Sửa</button>
+                        <button class="btn btn-delete" onclick="deleteNews(${index})">Xóa</button>
                     </td>
                 `;
             });
-        }
-
-        function deleteNews(title) {
-            var newsList = JSON.parse(localStorage.getItem("newsList")) || [];
-            newsList = newsList.filter(news => news.title !== title);
-            localStorage.setItem("newsList", JSON.stringify(newsList));
-            loadNews();
         }
     </script>
 </body>

@@ -70,7 +70,25 @@
         document.addEventListener("DOMContentLoaded", () => {
             loadNews();
             showAdminPanel();
+            startMarquee();
         });
+
+        function startMarquee() {
+            let marquee = document.getElementById("marquee-text");
+            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
+            let textWidth = marquee.offsetWidth;
+            let position = containerWidth;
+
+            function move() {
+                position -= 2;
+                if (position < -textWidth) {
+                    position = containerWidth;
+                }
+                marquee.style.transform = `translateX(${position}px)`;
+                requestAnimationFrame(move);
+            }
+            move();
+        }
 
         function checkLogin() {
             let password = document.getElementById("admin-password").value;

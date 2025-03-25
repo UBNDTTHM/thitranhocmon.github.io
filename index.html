@@ -117,46 +117,62 @@
     </div>
     
     <script>
+        let editingIndex = -1;
+
+        function login() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            if (username === "admin" && password === "Hieu@1990") {
+                document.getElementById("login").classList.add("hidden");
+                document.getElementById("dashboard").classList.remove("hidden");
+                loadNews();
+            } else {
+                alert("Sai tên đăng nhập hoặc mật khẩu");
+            }
+        }
+
+        function saveNews() {
+            let title = document.getElementById("newsTitle").value;
+            let summary = document.getElementById("newsSummary").value;
+            let date = new Date().toLocaleDateString();
+            let user = "admin";
+            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+            
+            if (title && summary) {
+                newsList.push({ title, summary, date, user, published: false });
+                localStorage.setItem("newsList", JSON.stringify(newsList));
+                loadNews();
+                hideNewsForm();
+            }
+        }
+
+        function loadNews() {
+            let tableBody = document.getElementById("newsTable").getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = "";
+            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+            newsList.forEach((news, index) => {
+                let newRow = tableBody.insertRow();
+                newRow.innerHTML = `
+                    <td><input type="checkbox"></td>
+                    <td><img src="default.jpg" width="50"></td>
+                    <td>${news.title}</td>
+                    <td>${news.summary}</td>
+                    <td>${news.date}</td>
+                    <td>${news.user}</td>
+                    <td>
+                        <button class="btn btn-edit" onclick="showNewsForm(${index})">Sửa</button>
+                        <button class="btn btn-delete" onclick="deleteNews(${index})">Xóa</button>
+                        <button class="btn btn-publish" onclick="publishNews(${index})">Đăng tin</button>
+                    </td>
+                `;
+            });
+        }
+
         function publishNews(index) {
             let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
             newsList[index].published = true;
             localStorage.setItem("newsList", JSON.stringify(newsList));
-            let newsPage = `news_${index}.html`;
-            generateNewsPage(newsList[index], newsPage);
             alert("Tin tức đã được đăng!");
-            window.open(newsPage, "_blank");
-        }
-
-        function generateNewsPage(news, filename) {
-            let newsContent = `<!DOCTYPE html>
-            <html lang='vi'>
-            <head>
-                <meta charset='UTF-8'>
-                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                <title>${news.title}</title>
-                <style>
-                    body { font-family: Arial, sans-serif; margin: 20px; }
-                    .news-container { width: 80%; margin: auto; }
-                    .news-title { font-size: 24px; font-weight: bold; }
-                    .news-summary { margin-top: 10px; }
-                </style>
-            </head>
-            <body>
-                <div class='news-container'>
-                    <h1 class='news-title'>${news.title}</h1>
-                    <p class='news-summary'>${news.summary}</p>
-                    <p><i>Ngày đăng: ${news.date}</i></p>
-                </div>
-            </body>
-            </html>`;
-            let blob = new Blob([newsContent], { type: 'text/html' });
-            let url = URL.createObjectURL(blob);
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
         }
     </script>
 </body>

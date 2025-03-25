@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang tin tức</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .news-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .news-item h2 {
+            margin-bottom: 5px;
+        }
+        .news-item p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tin tức đã đăng</h1>
+        <div id="news-list">
+            </div>
+    </div>
+
+    <script>
+        function loadPublishedNews() {
+            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+            let publishedNews = newsList.filter(news => news.published);
+            let newsListDiv = document.getElementById("news-list");
+            newsListDiv.innerHTML = ""; // Xóa nội dung cũ
+
+            publishedNews.forEach(news => {
+                let newsItem = document.createElement("div");
+                newsItem.classList.add("news-item");
+                newsItem.innerHTML = `
+                    <h2>${news.title}</h2>
+                    <p>${news.summary}</p>
+                    <p>Ngày đăng: ${news.date}</p>
+                `;
+                newsListDiv.appendChild(newsItem);
+            });
+        }
+
+        loadPublishedNews();
+    </script>
+</body>
+</html>

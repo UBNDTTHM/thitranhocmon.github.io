@@ -7,157 +7,103 @@
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
         .header { background-color: #0044cc; color: white; text-align: center; padding: 15px; font-size: 22px; }
-        .navbar { background-color: #003399; padding: 10px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; }
-        .navbar a { color: white; padding: 10px 15px; text-decoration: none; display: block; }
-        .content { padding: 15px; }
+        .navbar { background-color: #003399; padding: 10px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .navbar a { color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; transition: 0.3s; }
+        .navbar a:hover { background-color: #0055ff; }
+        .content { padding: 20px; }
         .marquee-container {
-            overflow: hidden;
             background: #003399;
             color: white;
             padding: 15px 0;
-            display: flex;
-            align-items: center;
+            overflow: hidden;
             position: relative;
-            width: 100vw;
-            height: 60px;
             white-space: nowrap;
         }
         .marquee-content {
-            font-size: 36px;
+            display: inline-block;
+            padding-left: 100%;
+            font-size: 24px;
             font-weight: bold;
-            position: absolute;
-            white-space: nowrap;
-            will-change: transform;
+            animation: marquee 10s linear infinite;
         }
-        .announcement { background: white; padding: 15px; margin: 10px 0; border-left: 5px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; }
-        .delete-button, .edit-button { position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; display: none; }
-        .edit-button { right: 70px; background-color: orange; }
-        #news-form { display: none; margin: 20px 0; }
-        #news-form input, #news-form textarea { display: block; width: 100%; margin-bottom: 10px; padding: 10px; }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+        .news-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 5px solid #cc0000;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
     </style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+        
+        const firebaseConfig = {
+            apiKey: "YAIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
+            authDomain: "hocmonnews-c3abc.firebaseapp.com",
+            databaseURL: "https://hocmonnews-c3abc-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "hocmonnews-c3abc",
+            storageBucket: "hocmonnews-c3abc.appspot.com",
+            messagingSenderId: "359391584763",
+            appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const newsRef = ref(db, 'news');
+        
+        document.getElementById("news-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const title = document.getElementById("news-title").value;
+            const content = document.getElementById("news-content").value;
+            if (title && content) {
+                push(newsRef, { title, content });
+                document.getElementById("news-title").value = "";
+                document.getElementById("news-content").value = "";
+            }
+        });
+        
+        function loadNews() {
+            onValue(newsRef, (snapshot) => {
+                const newsContainer = document.getElementById("news-container");
+                newsContainer.innerHTML = "";
+                snapshot.forEach(childSnapshot => {
+                    const newsData = childSnapshot.val();
+                    const newsItem = document.createElement("div");
+                    newsItem.classList.add("news-card");
+                    newsItem.innerHTML = `<h3>${newsData.title}</h3><p>${newsData.content}</p>`;
+                    newsContainer.appendChild(newsItem);
+                });
+            });
+        }
+        loadNews();
+    </script>
 </head>
 <body>
     <div class="marquee-container">
-        <div class="marquee-content" id="marquee-text">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
+        <div class="marquee-content">TRANG THÔNG TIN THỊ TRẤN HÓC MÔN</div>
     </div>
-
+    
     <div class="navbar">
         <a href="#">Giới Thiệu</a>
         <a href="#">Tin Tức</a>
         <a href="#">Thông Báo</a>
         <a href="#">Liên Hệ</a>
     </div>
-
-    <div id="login-section">
-        <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
-        <button onclick="checkLogin()">Đăng nhập</button>
-    </div>
     
-    <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
-    
-    <div id="news-form">
-        <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
-        <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
-        <button onclick="addNews()">Đăng Tin</button>
-    </div>
-
     <div class="content">
         <h2>Danh Sách Tin Tức</h2>
+        <form id="news-form">
+            <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức" required>
+            <textarea id="news-content" placeholder="Nhập nội dung tin tức" required></textarea>
+            <button type="submit">Đăng Tin</button>
+        </form>
         <div id="news-container"></div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            loadNews();
-            showAdminPanel();
-            startMarquee();
-        });
-
-        function startMarquee() {
-            let marquee = document.getElementById("marquee-text");
-            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
-            let textWidth = marquee.offsetWidth;
-            let position = containerWidth;
-
-            function move() {
-                position -= 2;
-                if (position < -textWidth) {
-                    position = containerWidth;
-                }
-                marquee.style.transform = `translateX(${position}px)`;
-                requestAnimationFrame(move);
-            }
-            move();
-        }
-
-        function checkLogin() {
-            let password = document.getElementById("admin-password").value;
-            if (password === "Hieu@1990") {
-                localStorage.setItem("isAdmin", "true");
-                showAdminPanel();
-            } else {
-                alert("Sai mật khẩu!");
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem("isAdmin");
-            location.reload();
-        }
-
-        function showAdminPanel() {
-            let isAdmin = localStorage.getItem("isAdmin") === "true";
-            document.getElementById("news-form").style.display = isAdmin ? "block" : "none";
-            document.getElementById("logout-button").style.display = isAdmin ? "block" : "none";
-            document.querySelectorAll(".delete-button, .edit-button").forEach(button => {
-                button.style.display = isAdmin ? "block" : "none";
-            });
-        }
-
-        function addNews() {
-            let title = document.getElementById("news-title").value;
-            let content = document.getElementById("news-content").value;
-            if (title && content) {
-                let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-                newsList.push({ title, content });
-                localStorage.setItem("newsData", JSON.stringify(newsList));
-                loadNews();
-            }
-        }
-
-        function loadNews() {
-            let newsContainer = document.getElementById("news-container");
-            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-            newsContainer.innerHTML = "";
-            newsList.forEach((news, index) => {
-                let newsItem = document.createElement("div");
-                newsItem.classList.add("announcement");
-                newsItem.innerHTML = `<h3>${news.title}</h3><p>${news.content}</p>
-                    <button class='edit-button' onclick='editNews(${index})'>Chỉnh sửa</button>
-                    <button class='delete-button' onclick='deleteNews(${index})'>Xóa</button>`;
-                newsContainer.appendChild(newsItem);
-            });
-        }
-
-        function editNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-            let newTitle = prompt("Chỉnh sửa tiêu đề:", newsList[index].title);
-            let newContent = prompt("Chỉnh sửa nội dung:", newsList[index].content);
-            if (newTitle && newContent) {
-                newsList[index] = { title: newTitle, content: newContent };
-                localStorage.setItem("newsData", JSON.stringify(newsList));
-                loadNews();
-            }
-        }
-
-        function deleteNews(index) {
-            let newsList = JSON.parse(localStorage.getItem("newsData")) || [];
-            if (confirm("Bạn có chắc muốn xóa tin này?")) {
-                newsList.splice(index, 1);
-                localStorage.setItem("newsData", JSON.stringify(newsList));
-                loadNews();
-            }
-        }
-    </script>
 </body>
 </html>

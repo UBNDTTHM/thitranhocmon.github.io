@@ -112,13 +112,105 @@
     </div>
     
     <div class="content">
-        <h2>Danh Sách Tin Tức</h2>
-        <form id="news-form">
-            <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức" required>
-            <textarea id="news-content" placeholder="Nhập nội dung tin tức" required></textarea>
-            <button type="submit">Đăng Tin</button>
-        </form>
-        <div id="news-container"></div>
+       <h2>Danh Sách Tin Tức</h2>
+
+        <!-- Form đăng nhập -->
+        <div id="login-form">
+            <input type="text" id="username" placeholder="Tên đăng nhập">
+            <input type="password" id="password" placeholder="Mật khẩu">
+            <button onclick="login()">Đăng nhập</button>
+        </div>
+
+        <!-- Bảng quản lý tin tức (chỉ hiển thị khi là admin) -->
+        <div id="adminPanel" style="display: none;">
+            <input type="text" id="title" placeholder="Nhập tiêu đề">
+            <textarea id="content" placeholder="Nhập nội dung"></textarea>
+            <button onclick="postNews()">Đăng tin</button>
+        </div>
+       <div id="news-container"></div>
     </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+        // Cấu hình Firebase
+        const firebaseConfig = {
+            apiKey: "YAIzaSyAqIaUm_dTHxzkVPfgwe_iYGi182-BGqbE",
+            authDomain: "hocmonnews-c3abc.firebaseapp.com",
+            databaseURL: "https://hocmonnews-c3abc-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "hocmonnews-c3abc",
+            storageBucket: "hocmonnews-c3abc.appspot.com",
+            messagingSenderId: "359391584763",
+            appId: "1:359391584763:web:c5fdacf8a7a37fccc46b5e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const newsRef = ref(db, 'news');
+
+        // Biến kiểm tra admin
+        let isAdmin = localStorage.getItem("isAdmin") === "true";
+
+        function login() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            if (username === "admin" && password === "Hieu@1990") {
+                isAdmin = true;
+                localStorage.setItem("isAdmin", "true");
+                alert("Đăng nhập thành công! Bạn là Admin.");
+                document.getElementById("adminPanel").style.display = "block";
+            } else {
+                alert("Sai tài khoản hoặc mật khẩu!");
+            }
+        }
+
+        function postNews() {
+            if (!isAdmin) {
+                alert("Bạn không có quyền đăng tin!");
+                return;
+            }
+
+            let title = document.getElementById("title").value;
+            let content = document.getElementById("content").value;
+
+            if (title.trim() === "" || content.trim() === "") {
+                alert("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            push(newsRef, { title, content, timestamp: Date.now() })
+                .then(() => {
+                    alert("Đăng tin thành công!");
+                    document.getElementById("title").value = "";
+                    document.getElementById("content").value = "";
+                })
+                .catch(error => {
+                    console.error("Lỗi khi đăng tin:", error);
+                });
+        }
+
+        function loadNews() {
+            onValue(newsRef, (snapshot) => {
+                const newsContainer = document.getElementById("news-container");
+                newsContainer.innerHTML = "";
+                snapshot.forEach(childSnapshot => {
+                    const newsData = childSnapshot.val();
+                    const newsItem = document.createElement("div");
+                    newsItem.classList.add("news-card");
+                    newsItem.innerHTML = `<h3>${newsData.title}</h3><p>${newsData.content}</p>`;
+                    newsContainer.appendChild(newsItem);
+                });
+            });
+        }
+
+        loadNews();
+
+        // Kiểm tra nếu là admin thì hiển thị bảng quản lý
+        if (isAdmin) {
+            document.getElementById("adminPanel").style.display = "block";
+        }
+    </script>
 </body>
 </html>

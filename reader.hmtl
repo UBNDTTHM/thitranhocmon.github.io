@@ -34,7 +34,7 @@
     <div class="container">
         <h1>Tin tức đã đăng</h1>
         <div id="news-list">
-            </div>
+        </div>
     </div>
 
     <script>

@@ -173,6 +173,33 @@
             newsList[index].published = true;
             localStorage.setItem("newsList", JSON.stringify(newsList));
             alert("Tin tức đã được đăng!");
+            // Redirect to the reader's page
+            window.open('reader.html', '_blank');
+        }
+        function showNewsForm(index) {
+            document.getElementById("newsForm").style.display = "block";
+            if (index !== undefined) {
+                editingIndex = index;
+                let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+                document.getElementById("newsTitle").value = newsList[index].title;
+                document.getElementById("newsSummary").value = newsList[index].summary;
+                document.getElementById("formTitle").textContent = "Sửa tin bài";
+            } else {
+                editingIndex = -1;
+                document.getElementById("newsTitle").value = "";
+                document.getElementById("newsSummary").value = "";
+                document.getElementById("formTitle").textContent = "Thêm tin bài mới";
+            }
+        }
+
+        function hideNewsForm() {
+            document.getElementById("newsForm").style.display = "none";
+        }
+        function deleteNews(index) {
+            let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+            newsList.splice(index, 1);
+            localStorage.setItem("newsList", JSON.stringify(newsList));
+            loadNews();
         }
     </script>
 </body>

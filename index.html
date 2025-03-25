@@ -11,9 +11,25 @@
         .navbar a { color: white; padding: 10px 15px; text-decoration: none; display: block; }
         .content { padding: 15px; }
         
-        .marquee-container { overflow: hidden; background: #003399; color: white; padding: 10px 0; position: relative; }
-        .marquee-content { font-size: 20px; font-weight: bold; position: absolute; white-space: nowrap; will-change: transform; }
-        
+        .marquee-container {
+        overflow: hidden;
+        background: #003399;
+        color: white;
+        padding: 15px 0;
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: 100vw; /* Chiều rộng toàn bộ màn hình */
+        white-space: nowrap;
+        }
+    
+    .marquee-content {
+        font-size: 36px;
+        font-weight: bold;
+        position: absolute;
+        white-space: nowrap;
+        will-change: transform;
+        }
         #login-section { display: flex; justify-content: flex-end; align-items: center; padding: 10px; }
         #login-section input { padding: 8px; margin-right: 10px; width: 200px; max-width: 100%; }
         #login-section button { padding: 8px; cursor: pointer; }
@@ -62,21 +78,24 @@
 
     <script>
         function startMarquee() {
-            let marquee = document.getElementById("marquee-text");
-            let containerWidth = document.querySelector(".marquee-container").offsetWidth;
-            let textWidth = marquee.offsetWidth;
-            let position = containerWidth;
-            
-            function move() {
-                position -= 2;
-                if (position < -textWidth) {
-                    position = containerWidth;
-                }
-                marquee.style.transform = `translateX(${position}px)`;
-                requestAnimationFrame(move);
+        let marquee = document.getElementById("marquee-text");
+        let container = document.querySelector(".marquee-container");
+
+        let containerWidth = container.offsetWidth;
+        let textWidth = marquee.offsetWidth;
+        let position = containerWidth; // Bắt đầu ngoài màn hình bên phải
+
+        function move() {
+            position -= 2; // Điều chỉnh tốc độ chạy
+            if (position < -textWidth) {
+                position = containerWidth; // Reset vị trí khi chữ chạy hết
             }
-            move();
+            marquee.style.transform = `translateX(${position}px)`;
+            requestAnimationFrame(move);
         }
+
+        move();
+    }
         
         document.addEventListener("DOMContentLoaded", startMarquee);
         const ADMIN_PASSWORD = "Hieu@1990";

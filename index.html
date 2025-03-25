@@ -3,89 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập hệ thống</title>
+    <title>Quản lý tin tức</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
         .header {
             background-color: #007bff;
             color: white;
-            width: 100%;
+            padding: 15px;
             text-align: center;
-            padding: 15px 0;
             font-size: 20px;
             font-weight: bold;
         }
-        .login-container {
+        .container {
+            width: 90%;
+            margin: 20px auto;
             background: white;
             padding: 20px;
-            border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            text-align: center;
-            margin-top: 20px;
         }
-        .login-container h2 {
-            margin-bottom: 20px;
+        .table-container {
+            overflow-x: auto;
         }
-        .input-group {
-            margin-bottom: 15px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
             text-align: left;
         }
-        .input-group label {
-            display: block;
-            font-weight: bold;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .btn {
+        th {
             background-color: #007bff;
             color: white;
+        }
+        .btn {
             padding: 10px;
+            margin: 5px;
             border: none;
+            color: white;
             cursor: pointer;
             border-radius: 4px;
-            width: 100%;
         }
+        .btn-add { background-color: green; }
+        .btn-edit { background-color: orange; }
+        .btn-delete { background-color: red; }
+        .login-container {
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="header">TRANG THÔNG TIN TUYÊN TRUYỀN THỊ TRẤN HÓC MÔN</div>
-    <div class="login-container">
-        <h2>Đăng nhập hệ thống</h2>
-        <div class="input-group">
-            <label for="username">Thông tin tài khoản</label>
-            <input type="text" id="username" placeholder="Tên đăng nhập">
-        </div>
-        <div class="input-group">
-            <label for="password">Mật khẩu</label>
-            <input type="password" id="password" placeholder="Mật khẩu">
-        </div>
-        <button class="btn" onclick="login()">Đăng nhập</button>
+    <div id="login" class="login-container">
+        <h2>Đăng nhập</h2>
+        <input type="text" id="username" placeholder="Tên đăng nhập"><br><br>
+        <input type="password" id="password" placeholder="Mật khẩu"><br><br>
+        <button onclick="login()">Đăng nhập</button>
     </div>
+    
+    <div id="dashboard" class="hidden">
+        <div class="header">HỆ THỐNG QUẢN TRỊ TRANG THÔNG TIN ĐIỆN TỬ<br>THỊ TRẤN HÓC MÔN</div>
+        <div class="container">
+            <h2>Quản lý tin tức</h2>
+            <button class="btn btn-add">Thêm tin bài mới</button>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Chọn</th>
+                            <th>Ảnh</th>
+                            <th>Tiêu đề</th>
+                            <th>Tóm tắt</th>
+                            <th>Ngày đưa tin</th>
+                            <th>Người tạo</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td><img src="example1.jpg" width="50"></td>
+                            <td>Số điện thoại Công an 12 xã - thị trấn</td>
+                            <td>Số điện thoại tiếp nhận thông tin về an ninh trật tự</td>
+                            <td>24/3/2025</td>
+                            <td>admin</td>
+                            <td>
+                                <button class="btn btn-edit">Sửa</button>
+                                <button class="btn btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td><img src="example2.jpg" width="50"></td>
+                            <td>35 thủ tục hành chính</td>
+                            <td>35 thủ tục hành chính, dịch vụ công trực tuyến</td>
+                            <td>13/3/2025</td>
+                            <td>admin</td>
+                            <td>
+                                <button class="btn btn-edit">Sửa</button>
+                                <button class="btn btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
     <script>
         function login() {
             var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;
-            
             if (username === "admin" && password === "Hieu@1990") {
-                alert("Đăng nhập thành công!");
-                window.location.href = "admin_dashboard.html"; // Chuyển hướng sau khi đăng nhập thành công
+                document.getElementById("login").classList.add("hidden");
+                document.getElementById("dashboard").classList.remove("hidden");
             } else {
-                alert("Sai tên đăng nhập hoặc mật khẩu!");
+                alert("Sai tên đăng nhập hoặc mật khẩu");
             }
         }
     </script>

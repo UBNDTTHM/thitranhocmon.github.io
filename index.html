@@ -3,104 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý tin tức</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 80%; margin: auto; }
-        .hidden { display: none; }
-    </style>
+    <title>Trang tin tức</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="login">
-        <h2>Đăng nhập</h2>
-        <input type="text" id="username" placeholder="Tên đăng nhập">
-        <input type="password" id="password" placeholder="Mật khẩu">
-        <button onclick="login()">Đăng nhập</button>
+    <div class="container">
+        <h1>Tin tức mới nhất</h1>
+        <div id="news-list"></div>
     </div>
 
-    <div id="dashboard" class="hidden">
-        <h2>Quản lý tin tức</h2>
-        <button onclick="showForm()">Thêm tin</button>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Tiêu đề</th>
-                    <th>Tóm tắt</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody id="newsList"></tbody>
-        </table>
-    </div>
-
-    <div id="newsForm" class="hidden">
-        <h2>Thêm/Sửa Tin</h2>
-        <input type="text" id="newsTitle" placeholder="Tiêu đề">
-        <textarea id="newsSummary" placeholder="Tóm tắt"></textarea>
-        <button onclick="saveNews()">Lưu</button>
-        <button onclick="hideForm()">Hủy</button>
-    </div>
-
-    <script>
-        let newsData = JSON.parse(localStorage.getItem("newsData")) || [];
-        function login() {
-            if (document.getElementById("username").value === "admin" && document.getElementById("password").value === "123") {
-                document.getElementById("login").classList.add("hidden");
-                document.getElementById("dashboard").classList.remove("hidden");
-                loadNews();
-            } else {
-                alert("Sai thông tin đăng nhập!");
-            }
-        }
-function login() {
-        let username = document.getElementById("username").value;
-        let password = document.getElementById("password").value;
-
-        if (username === "admin" && password === "Hieu@1990") {
-            localStorage.setItem("loggedIn", "true");
-            window.location.href = "admin.html"; // Chuyển hướng đến trang admin
-        } else {
-            alert("Sai tên đăng nhập hoặc mật khẩu!");
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        if (localStorage.getItem("loggedIn") === "true") {
-            window.location.href = "admin.html"; // Nếu đã đăng nhập, chuyển hướng luôn
-        }
-    });
-        function showForm(index = -1) {
-            document.getElementById("newsForm").classList.remove("hidden");
-        }
-        function hideForm() {
-            document.getElementById("newsForm").classList.add("hidden");
-        }
-        function saveNews() {
-            let title = document.getElementById("newsTitle").value;
-            let summary = document.getElementById("newsSummary").value;
-            if (title && summary) {
-                newsData.push({ title, summary });
-                localStorage.setItem("newsData", JSON.stringify(newsData));
-                loadNews();
-                hideForm();
-            }
-        }
-        function loadNews() {
-            let list = document.getElementById("newsList");
-            list.innerHTML = "";
-            newsData.forEach((news, index) => {
-                list.innerHTML += `<tr>
-                    <td>${news.title}</td>
-                    <td>${news.summary}</td>
-                    <td><button onclick="deleteNews(${index})">Xóa</button></td>
-                </tr>`;
-            });
-        }
-        function deleteNews(index) {
-            newsData.splice(index, 1);
-            localStorage.setItem("newsData", JSON.stringify(newsData));
-            loadNews();
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

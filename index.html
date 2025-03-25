@@ -19,6 +19,8 @@
         <a href="#">Trang chủ</a>
         <a href="#">Tin tức</a>
         <a href="#">Liên hệ</a>
+        <a href="#">Giới Thiệu</a>
+        <a href="#">Thông Báo</a>
     </div>
     <div class="content">
         <h1>Chào mừng đến với Trang Thông Tin Thị Trấn Hóc Môn</h1>
@@ -27,22 +29,15 @@
         </div>
     </div>
 
-    <div class="navbar">
-        <a href="#">Giới Thiệu</a>
-        <a href="#">Tin Tức</a>
-        <a href="#">Thông Báo</a>
-        <a href="#">Liên Hệ</a>
-    </div>
-
     <div id="login-section">
-        <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
+        <input type="password" id="admin-password-input" placeholder="Nhập mật khẩu quản trị">
         <button onclick="checkLogin()">Đăng nhập</button>
     </div>
-    
+
     <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
-    
+
     <div id="news-form" style="display: none;">
-        <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
+        <input type="text" id="news-title-input" placeholder="Nhập tiêu đề tin tức">
         <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
         <button onclick="addNews()">Đăng Tin</button>
     </div>
@@ -52,11 +47,10 @@
         <div id="news-container"></div>
     </div>
 
-    <!-- Firebase SDK (Đúng cách) -->
     <script type="module">
         // Import Firebase từ CDN
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
 
         // Cấu hình Firebase
         const firebaseConfig = {
@@ -72,48 +66,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         console.log("✅ Firebase đã khởi tạo thành công!");
-    </script>
-</body>
-    <div class="navbar">
-        <a href="#">Giới Thiệu</a>
-        <a href="#">Tin Tức</a>
-        <a href="#">Thông Báo</a>
-        <a href="#">Liên Hệ</a>
-    </div>
-
-    <div id="login-section">
-        <input type="password" id="admin-password" placeholder="Nhập mật khẩu quản trị">
-        <button onclick="checkLogin()">Đăng nhập</button>
-    </div>
-    
-    <button id="logout-button" style="display: none;" onclick="logout()">Thoát đăng nhập</button>
-    
-    <div id="news-form" style="display: none;">
-        <input type="text" id="news-title" placeholder="Nhập tiêu đề tin tức">
-        <textarea id="news-content" placeholder="Nhập nội dung tin tức"></textarea>
-        <button onclick="addNews()">Đăng Tin</button>
-    </div>
-
-    <div class="content">
-        <h2>Danh Sách Tin Tức</h2>
-        <div id="news-container"></div>
-    </div>
-
-    <script>
-     const firebaseConfig = {
-    apiKey: "",  // Web API Key chưa có, cần tạo
-    authDomain: "hocmonnews-c3abc.firebaseapp.com",
-    projectId: "hocmonnews-c3abc",
-    storageBucket: "hocmonnews-c3abc.appspot.com",
-    messagingSenderId: "359391584763",
-    appId: ""  // Cần tạo ứng dụng để lấy App ID
-    };
-        
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
 
         function checkLogin() {
-            let password = document.getElementById("admin-password").value;
+            let password = document.getElementById("admin-password-input").value;
             if (password === "Hieu@1990") {
                 localStorage.setItem("isAdmin", "true");
                 showAdminPanel();
@@ -137,13 +92,13 @@
         }
 
         function addNews() {
-            let title = document.getElementById("news-title").value;
+            let title = document.getElementById("news-title-input").value;
             let content = document.getElementById("news-content").value;
             if (title && content) {
-                db.collection("news").add({
+                addDoc(collection(db, "news"), {
                     title: title,
                     content: content,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    timestamp: serverTimestamp()
                 }).then(() => {
                     loadNews();
                 });
@@ -153,7 +108,7 @@
         function loadNews() {
             let newsContainer = document.getElementById("news-container");
             newsContainer.innerHTML = "";
-            db.collection("news").orderBy("timestamp", "desc").get().then((querySnapshot) => {
+            getDocs(query(collection(db, "news"), orderBy("timestamp", "desc"))).then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     let newsData = doc.data();
                     let newsItem = document.createElement("div");
@@ -172,7 +127,7 @@
             let newTitle = prompt("Chỉnh sửa tiêu đề:");
             let newContent = prompt("Chỉnh sửa nội dung:");
             if (newTitle && newContent) {
-                db.collection("news").doc(newsId).update({
+                updateDoc(doc(db, "news", newsId), {
                     title: newTitle,
                     content: newContent
                 }).then(() => {
@@ -183,7 +138,7 @@
 
         function deleteNews(newsId) {
             if (confirm("Bạn có chắc muốn xóa tin này?")) {
-                db.collection("news").doc(newsId).delete().then(() => {
+                deleteDoc(doc(db, "news", newsId)).then(() => {
                     loadNews();
                 });
             }

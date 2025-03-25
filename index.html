@@ -111,8 +111,6 @@
         <input type="text" id="newsTitle"><br><br>
         <label>Tóm tắt:</label>
         <textarea id="newsSummary"></textarea><br><br>
-        <label>Hình ảnh đại diện:</label>
-        <input type="file" id="newsImage"><br><br>
         <button onclick="saveNews()">Lưu tin bài</button>
         <button onclick="hideNewsForm()">Hủy</button>
     </div>
@@ -124,6 +122,7 @@
             if (username === "admin" && password === "Hieu@1990") {
                 document.getElementById("login").classList.add("hidden");
                 document.getElementById("dashboard").classList.remove("hidden");
+                loadNews();
             } else {
                 alert("Sai tên đăng nhập hoặc mật khẩu");
             }
@@ -144,40 +143,39 @@
             var user = "admin";
             
             if (title && summary) {
-                var table = document.getElementById("newsTable").getElementsByTagName('tbody')[0];
-                var newRow = table.insertRow();
-                newRow.innerHTML = `
-                    <td><input type="checkbox"></td>
-                    <td><img src="default.jpg" width="50"></td>
-                    <td>${title}</td>
-                    <td>${summary}</td>
-                    <td>${date}</td>
-                    <td>${user}</td>
-                    <td>
-                        <button class="btn btn-edit" onclick="editNews(this)">Sửa</button>
-                        <button class="btn btn-delete" onclick="deleteNews(this)">Xóa</button>
-                    </td>
-                `;
+                var newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+                newsList.push({ title, summary, date, user });
+                localStorage.setItem("newsList", JSON.stringify(newsList));
+                loadNews();
                 hideNewsForm();
             }
         }
 
-        function editNews(button) {
-            var row = button.parentElement.parentElement;
-            var title = prompt("Chỉnh sửa tiêu đề:", row.cells[2].innerText);
-            var summary = prompt("Chỉnh sửa tóm tắt:", row.cells[3].innerText);
-            
-            if (title && summary) {
-                row.cells[2].innerText = title;
-                row.cells[3].innerText = summary;
-            }
+        function loadNews() {
+            var tableBody = document.getElementById("newsTable").getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = "";
+            var newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+            newsList.forEach(news => {
+                var newRow = tableBody.insertRow();
+                newRow.innerHTML = `
+                    <td><input type="checkbox"></td>
+                    <td><img src="default.jpg" width="50"></td>
+                    <td>${news.title}</td>
+                    <td>${news.summary}</td>
+                    <td>${news.date}</td>
+                    <td>${news.user}</td>
+                    <td>
+                        <button class="btn btn-delete" onclick="deleteNews('${news.title}')">Xóa</button>
+                    </td>
+                `;
+            });
         }
 
-        function deleteNews(button) {
-            if (confirm("Bạn có chắc muốn xóa tin này không?")) {
-                var row = button.parentElement.parentElement;
-                row.parentElement.removeChild(row);
-            }
+        function deleteNews(title) {
+            var newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+            newsList = newsList.filter(news => news.title !== title);
+            localStorage.setItem("newsList", JSON.stringify(newsList));
+            loadNews();
         }
     </script>
 </body>
